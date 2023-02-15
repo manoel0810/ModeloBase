@@ -30,8 +30,8 @@ namespace ModeloBase
             G.DrawLine(Pens.Black, new Point(P_Desenho.Width / 2, 0), new Point(P_Desenho.Width / 2, P_Desenho.Height));
             G.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
 
-            DrawWithSpace(4, ref G, 100, 128, true, new Pen(Brushes.Blue, 1.5f));
-            DrawWithSpace(4, ref G, 80, 64, false, new Pen(Brushes.Red, 1.5f));
+            DrawWithSpace(6, ref G, 180, 32, true, new Pen(Brushes.Blue, 1.8f));
+            DrawWithSpace(6, ref G, 140, 32, false, new Pen(Brushes.Red, 1.8f));
 
             //DoDraw(ref G, 190, 256, ConvertToRadius(0),   ConvertToRadius(90));
             //DoDraw(ref G, 190, 256, ConvertToRadius(180), ConvertToRadius(270));
