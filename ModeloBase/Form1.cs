@@ -30,8 +30,8 @@ namespace ModeloBase
             G.DrawLine(Pens.Black, new Point(P_Desenho.Width / 2, 0), new Point(P_Desenho.Width / 2, P_Desenho.Height));
             G.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
 
-            DrawWithSpace(6, ref G, 180, 128, true, new Pen(Brushes.Blue, 1f));
-            DrawWithSpace(6, ref G, 135, 64, false, new Pen(Brushes.Red, 1f));
+            DrawWithSpace(4, ref G, 100, 128, true, new Pen(Brushes.Blue, 1.5f));
+            DrawWithSpace(4, ref G, 80, 64, false, new Pen(Brushes.Red, 1.5f));
 
             //DoDraw(ref G, 190, 256, ConvertToRadius(0),   ConvertToRadius(90));
             //DoDraw(ref G, 190, 256, ConvertToRadius(180), ConvertToRadius(270));
@@ -191,6 +191,13 @@ namespace ModeloBase
             II = 2,
             III = 3,
             IV = 4
+        }
+
+        private void Componente_Click(object sender, EventArgs e)
+        {
+            TesteComponente Teste = new TesteComponente();
+            Teste.ShowDialog();
+            Teste.Dispose();
         }
     }
 }

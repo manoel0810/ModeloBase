@@ -31,6 +31,7 @@
             this.P_Desenho = new System.Windows.Forms.Panel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.rodarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Componente = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -45,7 +46,8 @@
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.rodarToolStripMenuItem});
+            this.rodarToolStripMenuItem,
+            this.Componente});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(627, 24);
@@ -58,6 +60,13 @@
             this.rodarToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.rodarToolStripMenuItem.Text = "Rodar";
             this.rodarToolStripMenuItem.Click += new System.EventHandler(this.RodarToolStripMenuItem_Click);
+            // 
+            // Componente
+            // 
+            this.Componente.Name = "Componente";
+            this.Componente.Size = new System.Drawing.Size(89, 20);
+            this.Componente.Text = "Componente";
+            this.Componente.Click += new System.EventHandler(this.Componente_Click);
             // 
             // Form1
             // 
@@ -86,6 +95,7 @@
         private System.Windows.Forms.Panel P_Desenho;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem rodarToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem Componente;
     }
 }
 
