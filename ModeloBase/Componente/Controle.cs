@@ -182,10 +182,6 @@ namespace ModeloBase.Componente
             else
                 G.DrawCurve(Pen, Pnts);
 
-            var LIST = Pnts.ToList();
-            var TEMP = AlgoritmoBazier.SmoothCurve(LIST).ToArray();
-            G.DrawCurve(Pen, TEMP);
-            //G.DrawCurve(Pen, Pnts);
             PontosList.Clear();
         }
         private void DrawWithSpace(int Number, ref Graphics G, int raio, int pontos, bool Pri = true, Pen Color = null)
