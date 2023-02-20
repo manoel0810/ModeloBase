@@ -11,22 +11,24 @@ namespace ModeloBase.Componente
     {
         public SmoothBazier AlgoritmoBazier = new SmoothBazier();
         public Configuracoes Parametros = new Configuracoes();
-        public Bobina[] Bobinas = new Bobina[0x2];
+        public static Bobina[] Bobinas = new Bobina[0x2];
+        private ContextMenu Context = null;
 
-        private BobinaProps LastBobineState = new BobinaProps();
-        private Linha LastLineState = new Linha();
-
-        private readonly List<BobinaProps> Props = new List<BobinaProps>();
-        private readonly List<GraphicsPath> GP = new List<GraphicsPath>();
-        private readonly Argument[] Pontos = new Argument[0x2];
-        private readonly List<Linha> Linhas = new List<Linha>();
+        public static readonly List<BobinaProps> Props = new List<BobinaProps>();
+        public static readonly List<GraphicsPath> GP = new List<GraphicsPath>();
+        public static readonly Argument[] Pontos = new Argument[0x2];
+        public static readonly List<Linha> Linhas = new List<Linha>();
 
         private static Bitmap IMG = new Bitmap(80, 80);
-        private Graphics G = Graphics.FromImage(IMG);
+        private static Graphics G = Graphics.FromImage(IMG);
 
         private int SelectedIndex = -1;
         private int LastSelectedIndex = -1;
+        private int CharNumber = 65;
+        private int CountFase = 1;
         private bool INITIALIZED = false;
+
+        public static Color LastColorState = Color.Violet;
 
         public Controle()
         {
@@ -118,7 +120,7 @@ namespace ModeloBase.Componente
                 this.Color = Color ?? this.Color;
             }
         }
-        private void PrepearDraw(int Raio, int Pontos, double Begin, double End, Pen Color = null, bool SaveState = false)
+        private void PrepearDraw(int Raio, int Pontos, double Begin, double End, Pen Color = null)
         {
             var Pen = Color ?? new Pen(Brushes.DarkBlue, 3f);
             double Angulo = End - Begin;
@@ -141,9 +143,7 @@ namespace ModeloBase.Componente
             {
                 var LIST = Pnts.ToList();
                 for (int i = 0; i < Parametros.SMOOTH_ITERATIONS; i++)
-                {
                     LIST = AlgoritmoBazier.SmoothCurve(LIST);
-                }
 
                 var OBJ = new GraphicsPath();
                 OBJ.AddCurve(LIST.ToArray());
@@ -152,16 +152,13 @@ namespace ModeloBase.Componente
                 var obj = new BobinaProps()
                 {
                     Espec = 2f,
-                    Latters = '*',
-                    Name = "none",
+                    Latters = (char)CharNumber,
+                    Name = $"B{CountFase}",
                     Pens = Pen.Color,
                     Points = LIST.ToArray()
                 };
 
-                if (SaveState)
-                    LastBobineState = obj;
-                else
-                    Props.Add(obj);
+                Props.Add(obj);
             }
             else
             {
@@ -171,18 +168,17 @@ namespace ModeloBase.Componente
                 var obj = new BobinaProps()
                 {
                     Espec = 2f,
-                    Latters = '*',
-                    Name = "none",
+                    Latters = (char)CharNumber,
+                    Name = $"B{CountFase}",
                     Pens = Pen.Color,
                     Points = Pnts
                 };
 
-                if (SaveState)
-                    LastBobineState = obj;
-                else
-                    Props.Add(obj);
+                Props.Add(obj);
             }
 
+            CountFase++;
+            CharNumber++;
             PontosList.Clear();
         }
         private void CreateDrawerObject(int Number, int raio, int pontos, bool Pri = true, Pen Color = null, int ClickIndex = -1)
@@ -204,8 +200,8 @@ namespace ModeloBase.Componente
 
                     if (SelectedIndex == ClickIndex)
                     {
-                        PrepearDraw(raio, pontos, PositionAngle, PositionAngle + TamanhoPorParte, new Pen(Brushes.DarkGoldenrod, 3f), false);
-                        PrepearSegmentes(raio, PositionAngle, PositionAngle + TamanhoPorParte, Number, Pri, new Pen(Brushes.DarkGoldenrod, 3f), false);
+                        PrepearDraw(raio, pontos, PositionAngle, PositionAngle + TamanhoPorParte, new Pen(Brushes.DarkGoldenrod, 3f));
+                        PrepearSegmentes(raio, PositionAngle, PositionAngle + TamanhoPorParte, Number, Pri, new Pen(Brushes.DarkGoldenrod, 3f));
                         SelectedIndex = -2;
                         LastSelectedIndex = ClickIndex;
                     }
@@ -226,7 +222,7 @@ namespace ModeloBase.Componente
                 PositionAngle += TamanhoPorParte + SpaceValue;
             }
         }
-        private void PrepearSegmentes(int Raio, double StartAngle, double EndAngle, int Number, bool Pri = true, Pen Color = null, bool SaveLastSegment = false)
+        private void PrepearSegmentes(int Raio, double StartAngle, double EndAngle, int Number, bool Pri = true, Pen Color = null)
         {
             var Pen = Color ?? new Pen(Brushes.DarkBlue, 3f);
             double CorrectionFactor = Number >= 6 ? (ConvertToRadius(Parametros.FATOR_CORRECAO_BAIXO) * (1 / Number * Parametros.FATOR_CORRECAO_DECREMENTO)) : ConvertToRadius(Parametros.FATOR_CORRECAO_ALTO);
@@ -245,24 +241,14 @@ namespace ModeloBase.Componente
             EndPoints.Add(GetPoint(EndAngle - FractionAngle, Raio + FractionRaio, (Width / 2), (Height / 2)));
 
             //Draw Lines
-            if (SaveLastSegment)
-                LastLineState = new Linha()
-                {
-                    LineColor = Pen,
-                    FistLine = new PointF[] { ConvertPoint(StartPoints[0]), ConvertPoint(EndPoints[0]) },
-                    SecundLine = new PointF[] { ConvertPoint(StartPoints[1]), ConvertPoint(EndPoints[1]) },
-                    LineModel = LineType.Normal,
-                    LineSize = Pen.Width
-                };
-            else
-                Linhas.Add(new Linha()
-                {
-                    LineColor = Pen,
-                    FistLine = new PointF[] { ConvertPoint(StartPoints[0]), ConvertPoint(EndPoints[0]) },
-                    SecundLine = new PointF[] { ConvertPoint(StartPoints[1]), ConvertPoint(EndPoints[1]) },
-                    LineModel = LineType.Normal,
-                    LineSize = Pen.Width
-                });
+            Linhas.Add(new Linha()
+            {
+                LineColor = Pen,
+                FistLine = new PointF[] { ConvertPoint(StartPoints[0]), ConvertPoint(EndPoints[0]) },
+                SecundLine = new PointF[] { ConvertPoint(StartPoints[1]), ConvertPoint(EndPoints[1]) },
+                LineModel = LineType.Normal,
+                LineSize = Pen.Width
+            });
 
             if (Pri)
             {
@@ -369,10 +355,10 @@ namespace ModeloBase.Componente
             G.FillRectangle(Brushes.AliceBlue, new Rectangle(0, 0, Width, Height));
             G.DrawLine(Pens.Black, new Point(0, Height / 2), new Point(Width, Height / 2));
             G.DrawLine(Pens.Black, new Point(Width / 2, 0), new Point(Width / 2, Height));
-            G.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            G.CompositingQuality = CompositingQuality.HighQuality;
             BackgroundImage = IMG;
         }
-        public void DrawPoints()
+        public static void DrawPoints()
         {
             foreach (var T in Pontos)
                 if (T.Pontos.Count > 0)
@@ -387,7 +373,7 @@ namespace ModeloBase.Componente
                     }
                 }
         }
-        public void DrawObject()
+        public static void DrawObject()
         {
             for (int i = 0; i < Props.Count; i++)
             {
@@ -400,28 +386,9 @@ namespace ModeloBase.Componente
         }
         public void DrawImage(int ClickIndex = -1)
         {
-            SelectedIndex = -1;
-            if (GP.Count > 0)
-                for (int i = GP.Count - 1; i > -1; i--)
-                    GP.RemoveAt(i);
-
-            if (Linhas.Count > 0)
-                for (int i = Linhas.Count - 1; i > -1; i--)
-                    Linhas.RemoveAt(i);
-
-            if (Props.Count > 0)
-                for (int i = Props.Count - 1; i > -1; i--)
-                    Props.RemoveAt(i);
-
-            foreach (var B in Bobinas)
-                if (B != null)
-                    CreateDrawerObject(B.Bobinas, B.Raio, Parametros.RENDER_POINTS, B.Funcao == Type.Primaria, B.Color, ClickIndex);
-
-            DrawObject();
-
-            /*
             if (INITIALIZED == false)
             {
+                SelectedIndex = -1;
                 if (GP.Count > 0)
                     for (int i = GP.Count - 1; i > -1; i--)
                         GP.RemoveAt(i);
@@ -443,29 +410,47 @@ namespace ModeloBase.Componente
             }
             else
             {
+                DrawPlane();
                 if (ClickIndex == -1 && LastSelectedIndex == -1)
                     DrawObject();
                 else if (ClickIndex == -1 && LastSelectedIndex != ClickIndex)
                 {
-
+                    GoBackState(LastSelectedIndex);
+                    DrawObject();
+                    LastSelectedIndex = -1;
                 }
-            }*/
+                else if (ClickIndex != -1 && LastSelectedIndex == -1)
+                {
+                    UpdateObjectList(ClickIndex, Color.Black);
+                    DrawObject();
+                    LastSelectedIndex = ClickIndex;
+                }
+                else if (ClickIndex == LastSelectedIndex)
+                    DrawObject();
+                else if (ClickIndex != -1 && LastSelectedIndex != -1)
+                {
+                    GoBackState(LastSelectedIndex);
+                    UpdateObjectList(ClickIndex, Color.Black);
+                    DrawObject();
+                    LastSelectedIndex = ClickIndex;
+                }
+            }
         }
         public void VerifyClick(MouseEventArgs e)
         {
             Initialize();
             Bobinas[0] = new Bobina()
             {
-                Color = new Pen(Brushes.DarkBlue, 1.8f),
-                Bobinas = 8
+                Color = new Pen(Brushes.DarkBlue, 2f),
+                Bobinas = 6
             };
 
             Bobinas[1] = new Bobina()
             {
                 Raio = 130,
-                Color = new Pen(Brushes.Red, 1.8f),
+                Color = new Pen(Brushes.Red, 2f),
                 Funcao = Type.Auxiliar,
-                Bobinas = 8
+                Bobinas = 6
             };
 
             PointF P = new PointF(e.X, e.Y);
@@ -478,6 +463,54 @@ namespace ModeloBase.Componente
                 }
 
             DrawImage(index);
+            if (e.Button == MouseButtons.Right && index != -1)
+                ShowContext(e, index);
+        }
+        public static void UpdateObjectList(int Index, Color Cor)
+        {
+            LastColorState = Props[Index].Pens;
+            Props[Index].Pens = Cor;
+            Linhas[Index].LineColor = new Pen(Props[Index].Pens, Props[Index].Espec);
+            Linhas[Index].LineSize = Props[Index].Espec;
+
+            int[] Positions = GetBobinaIndexAndPoint(Index);
+            for (int i = 0; i < 2; i++)
+                Pontos[Positions[0]].Pontos[Positions[1] + i].PointColor = Linhas[Index].LineColor.Brush;
+
+        }
+        public void GoBackState(int LastIndex)
+        {
+            Props[LastIndex].Pens = LastColorState;
+            Linhas[LastIndex].LineColor = new Pen(Props[LastIndex].Pens, Linhas[LastIndex].LineColor.Width);
+
+            int[] Positions = GetBobinaIndexAndPoint(LastIndex);
+            for (int i = 0; i < 2; i++)
+                Pontos[Positions[0]].Pontos[Positions[1] + i].PointColor = Linhas[LastIndex].LineColor.Brush;
+        }
+        private static int[] GetBobinaIndexAndPoint(int Index)
+        {
+            int[] Info = new int[] { -1, -1 };
+            if (Index >= 0 && Index <= (Bobinas[0].Bobinas - 1))
+            {
+                Info[0] = (int)Type.Primaria;
+                Info[1] = Index * 2;
+            }
+            else
+            {
+                Info[0] = (int)Type.Auxiliar;
+                Info[1] = (Index - (Bobinas[0].Bobinas)) * 2;
+            }
+
+            return Info;
+        }
+        private void ShowContext(MouseEventArgs e, int Index)
+        {
+            var OBJ = Props[Index];
+            OBJ.Pens = LastColorState;
+            Context?.Dispose();
+
+            Context = new ContextMenu(OBJ, Index);
+            Context.contextMenu.Show(this, e.Location);
         }
         public class BobinaProps
         {
@@ -559,6 +592,61 @@ namespace ModeloBase.Componente
             }
 
             return smoothedPoints;
+        }
+    }
+
+    partial class ContextMenu : IDisposable
+    {
+        public int ExitCode { get; set; }
+        public int Index { get; set; }
+        public Controle.BobinaProps _Props = new Controle.BobinaProps();
+        public ContextMenuStrip contextMenu = new ContextMenuStrip();
+
+        public ContextMenu(Controle.BobinaProps Props2, int Index)
+        {
+            var editarItem = new ToolStripMenuItem("Editar");
+            var apagarItem = new ToolStripMenuItem("Apagar");
+            var propriedadesItem = new ToolStripMenuItem("Propriedades");
+
+            editarItem.Click += EditarItem_Click;
+            apagarItem.Click += ApagarItem_Click;
+            propriedadesItem.Click += PropriedadesItem_Click;
+
+            contextMenu.Items.Add(editarItem);
+            contextMenu.Items.Add(apagarItem);
+            contextMenu.Items.Add(propriedadesItem);
+            _Props = Props2;
+            ExitCode = -1;
+            this.Index = Index;
+        }
+
+        private void PropriedadesItem_Click(object sender, EventArgs e)
+        {
+            Prop P = new Prop(_Props);
+            P.ShowDialog();
+            ExitCode = P.ExitState;
+            _Props = P.PropsOutInstance;
+            P.Dispose();
+
+            Controle.LastColorState = _Props.Pens;
+            Controle.Props[Index] = _Props;
+            Controle.UpdateObjectList(Index, _Props.Pens);
+            Controle.DrawObject();
+        }
+
+        private void ApagarItem_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void EditarItem_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            ((IDisposable)contextMenu).Dispose();
         }
     }
 }
