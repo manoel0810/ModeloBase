@@ -10,14 +10,17 @@ namespace ModeloBase.Componente
     public partial class Controle : UserControl
     {
         public SmoothBazier AlgoritmoBazier = new SmoothBazier();
-        public Configuracoes Parametros = new Configuracoes();
+        public static Configuracoes Parametros = new Configuracoes();
         public static Bobina[] Bobinas = new Bobina[0x2];
         private ContextMenu Context = null;
 
         public static readonly List<BobinaProps> Props = new List<BobinaProps>();
         public static readonly List<GraphicsPath> GP = new List<GraphicsPath>();
+        public static readonly List<GraphicsPath> PGP = new List<GraphicsPath>();
         public static readonly Argument[] Pontos = new Argument[0x2];
         public static readonly List<Linha> Linhas = new List<Linha>();
+        public static readonly List<Linha> LinhasPonto = new List<Linha>();
+        public static readonly PointF[] PontosSegmento = new PointF[] { new PointF(-1, -1), new PointF(-1, -1) };
 
         private static Bitmap IMG = new Bitmap(80, 80);
         private static Graphics G = Graphics.FromImage(IMG);
@@ -56,6 +59,10 @@ namespace ModeloBase.Componente
             public LineType LineModel { get; set; }
             public PointF[] FistLine { get; set; }
             public PointF[] SecundLine { get; set; }
+
+            //Segment Properties (used to point-point line)
+            public PointF FistPoint { get; set; }
+            public PointF LastPoint { get; set; }
         }
         public partial class Ponto
         {
@@ -98,10 +105,13 @@ namespace ModeloBase.Componente
             public int FATOR_CORRECAO_DECREMENTO = 4;
             public int FATOR_CORRECAO_LIMITACAO = 8;
             public int POINT_SIZE = 10;
+            public int POINT_MARGIN = 1;
             public int RENDER_POINTS = 16;
             public int SMOOTH_ITERATIONS = 1;
+            public float LINE_WIDTH = 2f;
 
             public bool USE_SMOOTH = true;
+            public bool DRAW_LATTERS = true;
         }
         public partial class Bobina
         {
@@ -321,14 +331,14 @@ namespace ModeloBase.Componente
         {
             return new Ponto(XCorrectionFactor + Raio * Math.Cos(Angle), YCorrectionFactor - Raio * Math.Sin(Angle));
         }
-        public void Initialize(Configuracoes Parametros)
+        public void Initialize(Configuracoes ParametrosVar)
         {
-            this.Parametros = Parametros;
+            Parametros = ParametrosVar;
             DrawPlane();
         }
-        public void Initialize(Configuracoes Parametros, Bobina[] Bobina)
+        public void Initialize(Configuracoes ParametrosVar, Bobina[] Bobina)
         {
-            this.Parametros = Parametros;
+            Parametros = ParametrosVar;
             Bobinas = Bobina;
             DrawPlane();
         }
@@ -360,6 +370,8 @@ namespace ModeloBase.Componente
         }
         public static void DrawPoints()
         {
+            int Passo = 0;
+            int Count = 1;
             foreach (var T in Pontos)
                 if (T.Pontos.Count > 0)
                 {
@@ -370,6 +382,17 @@ namespace ModeloBase.Componente
                         int tamanho = (int)P.PointSize;
 
                         G.FillEllipse(P.PointColor, x - tamanho / 2, y - tamanho / 2, tamanho, tamanho);
+                        string TXT = Passo == 0 ? $"C{Count}" : $"F{Count}";
+                        if (Passo == 0)
+                            Passo = 1;
+                        else if (Passo == 1)
+                        {
+                            Passo = 0;
+                            Count++;
+                        }
+
+                        if (Parametros.DRAW_LATTERS)
+                            G.DrawString(TXT, new Font("Consolas", 10f, FontStyle.Bold), Brushes.Black, x + tamanho / 2, y - tamanho);
                     }
                 }
         }
@@ -381,6 +404,9 @@ namespace ModeloBase.Componente
                 G.DrawLine(Linhas[i].LineColor, Linhas[i].FistLine[0], Linhas[i].FistLine[1]);
                 G.DrawLine(Linhas[i].LineColor, Linhas[i].SecundLine[0], Linhas[i].SecundLine[1]);
             }
+
+            for (int i = 0; i < LinhasPonto.Count; i++)
+                G.DrawLine(new Pen(LinhasPonto[i].LineColor.Brush, Parametros.LINE_WIDTH), LinhasPonto[i].FistPoint, LinhasPonto[i].LastPoint);
 
             DrawPoints();
         }
@@ -404,6 +430,20 @@ namespace ModeloBase.Componente
                 foreach (var B in Bobinas)
                     if (B != null)
                         CreateDrawerObject(B.Bobinas, B.Raio, Parametros.RENDER_POINTS, B.Funcao == Type.Primaria, B.Color, ClickIndex);
+
+                foreach (var T in Pontos)
+                    if (T.Pontos.Count > 0)
+                    {
+                        foreach (var P in T.Pontos)
+                        {
+                            int x = (int)P.PointX;
+                            int y = (int)P.PointY;
+                            int tamanho = (int)P.PointSize;
+                            GraphicsPath VAR = new GraphicsPath();
+                            VAR.AddEllipse(x - tamanho / 2, y - tamanho / 2, tamanho, tamanho);
+                            PGP.Add(VAR);
+                        }
+                    }
 
                 DrawObject();
                 INITIALIZED = true;
@@ -441,26 +481,66 @@ namespace ModeloBase.Componente
             Initialize();
             Bobinas[0] = new Bobina()
             {
+                Raio = 230,
                 Color = new Pen(Brushes.DarkBlue, 2f),
-                Bobinas = 6
+                Bobinas = 12
             };
 
             Bobinas[1] = new Bobina()
             {
-                Raio = 130,
+                Raio = 150,
                 Color = new Pen(Brushes.Red, 2f),
                 Funcao = Type.Auxiliar,
-                Bobinas = 6
+                Bobinas = 12
             };
 
             PointF P = new PointF(e.X, e.Y);
             int index = -1;
+
+            if (INITIALIZED)
+            {
+                for (int i = 0; i < PGP.Count; i++)
+                {
+                    if (PGP[i].PointCount > 0 && PGP[i].IsVisible(new PointF(e.X, e.Y)))
+                    {
+                        index = i;
+                        break;
+                    }
+                }
+
+                if (index != -1)
+                {
+                    if (PontosSegmento[0].X == -1 && PontosSegmento[1].X == -1)
+                        PontosSegmento[0] = new PointF(e.X, e.Y);
+                    else if (PontosSegmento[0].X != -1 && PontosSegmento[1].X == -1)
+                    {
+                        if (Math.Abs(PontosSegmento[0].X - e.X) > Parametros.POINT_MARGIN && Math.Abs(PontosSegmento[0].Y - e.Y) > Parametros.POINT_MARGIN)
+                            PontosSegmento[1] = new PointF(e.X, e.Y);
+
+                        if (PontosSegmento[1].X != -1)
+                            LinhasPonto.Add(new Linha()
+                            {
+                                FistPoint = PontosSegmento[0],
+                                LastPoint = PontosSegmento[1],
+                                LineColor = new Pen(Brushes.Black, Parametros.POINT_SIZE / 2)
+                            });
+
+                        PontosSegmento[0] = new PointF(-1, -1);
+                        PontosSegmento[1] = new PointF(-1, -1);
+                    }
+                }
+
+                index = -1;
+            }
+
             for (int i = 0; i < GP.Count; i++)
                 if (GP[i].IsOutlineVisible(P, new Pen(Brushes.Red, 15f)))
                 {
                     index = i;
                     break;
                 }
+
+
 
             DrawImage(index);
             if (e.Button == MouseButtons.Right && index != -1)

@@ -39,7 +39,7 @@
             this.controle1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.controle1.Location = new System.Drawing.Point(12, 14);
             this.controle1.Name = "controle1";
-            this.controle1.Size = new System.Drawing.Size(400, 400);
+            this.controle1.Size = new System.Drawing.Size(600, 600);
             this.controle1.TabIndex = 0;
             // 
             // TesteComponente
@@ -47,7 +47,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(427, 426);
+            this.ClientSize = new System.Drawing.Size(621, 623);
             this.Controls.Add(this.controle1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
