@@ -13,10 +13,12 @@ namespace ModeloBase.Componente
         public static Configuracoes Parametros = new Configuracoes();
         public static Bobina[] Bobinas = new Bobina[0x2];
         private ContextMenu Context = null;
+        private ContextMenuPointLine ContextLine = null;
 
         public static readonly List<BobinaProps> Props = new List<BobinaProps>();
         public static readonly List<GraphicsPath> GP = new List<GraphicsPath>();
         public static readonly List<GraphicsPath> PGP = new List<GraphicsPath>();
+        public static readonly List<GraphicsPath> LGP = new List<GraphicsPath>();
         public static readonly Argument[] Pontos = new Argument[0x2];
         public static readonly List<Linha> Linhas = new List<Linha>();
         public static readonly List<Linha> LinhasPonto = new List<Linha>();
@@ -25,13 +27,16 @@ namespace ModeloBase.Componente
         private static Bitmap IMG = new Bitmap(80, 80);
         private static Graphics G = Graphics.FromImage(IMG);
 
-        private int SelectedIndex = -1;
+        public static int LastPointLineSelected = -1;
+        public static int SelectedIndex = -1;
         private int LastSelectedIndex = -1;
         private int CharNumber = 65;
         private int CountFase = 1;
+        private int CountLine = 1;
         private bool INITIALIZED = false;
 
         public static Color LastColorState = Color.Violet;
+        public static Color LastPointLineColorState = Color.Black;
 
         public Controle()
         {
@@ -54,6 +59,8 @@ namespace ModeloBase.Componente
         }
         public partial class Linha
         {
+            public string Name { get; set; }
+            public string ID { get; set; }
             public Pen LineColor { get; set; }
             public float LineSize { get; set; }
             public LineType LineModel { get; set; }
@@ -406,7 +413,7 @@ namespace ModeloBase.Componente
             }
 
             for (int i = 0; i < LinhasPonto.Count; i++)
-                G.DrawLine(new Pen(LinhasPonto[i].LineColor.Brush, Parametros.LINE_WIDTH), LinhasPonto[i].FistPoint, LinhasPonto[i].LastPoint);
+                G.DrawLine(new Pen(LinhasPonto[i].LineColor.Brush, (Parametros.LINE_WIDTH != LinhasPonto[i].LineColor.Width ? LinhasPonto[i].LineColor.Width : Parametros.LINE_WIDTH)), LinhasPonto[i].FistPoint, LinhasPonto[i].LastPoint);
 
             DrawPoints();
         }
@@ -495,10 +502,32 @@ namespace ModeloBase.Componente
             };
 
             PointF P = new PointF(e.X, e.Y);
-            int index = -1;
+            int index = -1, index2 = -1;
 
             if (INITIALIZED)
             {
+                if (LastPointLineSelected != -1)
+                {
+                    LinhasPonto[LastPointLineSelected].LineColor = new Pen(LastPointLineColorState, LinhasPonto[LastPointLineSelected].LineColor.Width);
+                    LastPointLineSelected = -1;
+                }
+
+                for (int i = 0; i < LGP.Count; i++)
+                {
+                    if (LGP[i].IsOutlineVisible(new PointF(e.X, e.Y), new Pen(Brushes.Black, 5f)))
+                    {
+                        index2 = i;
+                        break;
+                    }
+                }
+
+                if (index2 != -1 && (LinhasPonto.Count - 1) >= index2)
+                {
+                    LastPointLineSelected = index2;
+                    LastPointLineColorState = LinhasPonto[index2].LineColor.Color;
+                    LinhasPonto[index2].LineColor = new Pen(Brushes.DarkGreen, LinhasPonto[index2].LineColor.Width);
+                }
+
                 for (int i = 0; i < PGP.Count; i++)
                 {
                     if (PGP[i].PointCount > 0 && PGP[i].IsVisible(new PointF(e.X, e.Y)))
@@ -511,19 +540,41 @@ namespace ModeloBase.Componente
                 if (index != -1)
                 {
                     if (PontosSegmento[0].X == -1 && PontosSegmento[1].X == -1)
+                    {
                         PontosSegmento[0] = new PointF(e.X, e.Y);
+                        Cursor = Cursors.Hand;
+                    }
                     else if (PontosSegmento[0].X != -1 && PontosSegmento[1].X == -1)
                     {
                         if (Math.Abs(PontosSegmento[0].X - e.X) > Parametros.POINT_MARGIN && Math.Abs(PontosSegmento[0].Y - e.Y) > Parametros.POINT_MARGIN)
                             PontosSegmento[1] = new PointF(e.X, e.Y);
+                        else
+                        {
+                            Cursor = Cursors.Default;
+                            PontosSegmento[0] = new PointF(-1, -1);
+                        }
 
                         if (PontosSegmento[1].X != -1)
-                            LinhasPonto.Add(new Linha()
+                        {
+                            var Line = new Linha()
                             {
                                 FistPoint = PontosSegmento[0],
                                 LastPoint = PontosSegmento[1],
-                                LineColor = new Pen(Brushes.Black, Parametros.POINT_SIZE / 2)
-                            });
+                                LineColor = new Pen(Brushes.Black, Parametros.LINE_WIDTH),
+                                Name = "LINE",
+                                ID = $"L{CountLine}"
+                            };
+
+                            LinhasPonto.Add(Line);
+                            var PLine = new GraphicsPath();
+                            PLine.AddLine(Line.FistPoint, Line.LastPoint);
+                            LGP.Add(PLine);
+
+
+                            CountLine++;
+                            Cursor = Cursors.Default;
+                        }
+
 
                         PontosSegmento[0] = new PointF(-1, -1);
                         PontosSegmento[1] = new PointF(-1, -1);
@@ -533,6 +584,7 @@ namespace ModeloBase.Componente
                 index = -1;
             }
 
+
             for (int i = 0; i < GP.Count; i++)
                 if (GP[i].IsOutlineVisible(P, new Pen(Brushes.Red, 15f)))
                 {
@@ -540,11 +592,12 @@ namespace ModeloBase.Componente
                     break;
                 }
 
-
-
             DrawImage(index);
             if (e.Button == MouseButtons.Right && index != -1)
-                ShowContext(e, index);
+                ShowContext(e, index, 0);
+            else if (e.Button == MouseButtons.Right && index2 != -1)
+                ShowContext(e, index2, 1);
+
         }
         public static void UpdateObjectList(int Index, Color Cor)
         {
@@ -583,14 +636,22 @@ namespace ModeloBase.Componente
 
             return Info;
         }
-        private void ShowContext(MouseEventArgs e, int Index)
+        private void ShowContext(MouseEventArgs e, int Index, int Model)
         {
-            var OBJ = Props[Index];
-            OBJ.Pens = LastColorState;
-            Context?.Dispose();
+            if (Model == 0)
+            {
+                var OBJ = Props[Index];
+                OBJ.Pens = LastColorState;
+                Context?.Dispose();
 
-            Context = new ContextMenu(OBJ, Index);
-            Context.contextMenu.Show(this, e.Location);
+                Context = new ContextMenu(OBJ, Index);
+                Context.contextMenu.Show(this, e.Location);
+            }
+            else if (Model == 1)
+            {
+                ContextLine = new ContextMenuPointLine(Index, Width, Height);
+                ContextLine.contextMenu.Show(this, e.Location);
+            }
         }
         public class BobinaProps
         {
@@ -722,6 +783,52 @@ namespace ModeloBase.Componente
         private void EditarItem_Click(object sender, EventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            ((IDisposable)contextMenu).Dispose();
+        }
+    }
+
+    partial class ContextMenuPointLine : IDisposable
+    {
+        public int ExitCode { get; set; }
+        public int Index { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public ContextMenuStrip contextMenu = new ContextMenuStrip();
+
+        public ContextMenuPointLine(int Index, int w, int h)
+        {
+            var apagarItem = new ToolStripMenuItem("Apagar");
+            var propriedadesItem = new ToolStripMenuItem("Propriedades");
+
+            apagarItem.Click += ApagarItem_Click;
+            propriedadesItem.Click += PropriedadesItem_Click;
+
+            contextMenu.Items.Add(apagarItem);
+            contextMenu.Items.Add(propriedadesItem);
+
+            ExitCode = -1;
+            Width = w;
+            Height = h;
+
+            this.Index = Index;
+        }
+
+        private void PropriedadesItem_Click(object sender, EventArgs e)
+        {
+            LineProps Propriedades = new LineProps(Width, Height, Index);
+            Propriedades.ShowDialog();
+            Propriedades.Dispose();
+        }
+
+        private void ApagarItem_Click(object sender, EventArgs e)
+        {
+            Controle.LinhasPonto.RemoveAt(Index);
+            Controle.LGP.RemoveAt(Index);
+            Controle.LastPointLineSelected = -1;
         }
 
         public void Dispose()
