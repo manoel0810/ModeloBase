@@ -91,6 +91,9 @@
     <Compile Include="TesteComponente.Designer.cs">
       <DependentUpon>TesteComponente.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Componente\Controle.resx">
+      <DependentUpon>Controle.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Componente\LineProps.resx">
       <DependentUpon>LineProps.cs</DependentUpon>
     </EmbeddedResource>

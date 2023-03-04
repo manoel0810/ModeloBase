@@ -33,7 +33,7 @@ namespace ModeloBase
                     {
                         Raio = 230,
                         Color = new Pen(Brushes.DarkBlue, 2f),
-                        Bobinas = 12
+                        Bobinas = 6
                     },
 
                     Bobinas[1] = new Bobina()
@@ -41,7 +41,7 @@ namespace ModeloBase
                          Raio = 150,
                          Color = new Pen(Brushes.Red, 2f),
                          Funcao = Componente.Controle.Type.Auxiliar,
-                         Bobinas = 12
+                         Bobinas = 6
                     },
 
                 });

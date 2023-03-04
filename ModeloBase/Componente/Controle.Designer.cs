@@ -28,8 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // Controle
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Name = "Controle";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Controle_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Controle_KeyUp);
+            this.ResumeLayout(false);
+
         }
 
         #endregion

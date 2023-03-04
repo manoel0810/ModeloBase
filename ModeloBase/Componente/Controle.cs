@@ -14,6 +14,7 @@ namespace ModeloBase.Componente
         public static Bobina[] Bobinas = new Bobina[0x2];
         private static ContextMenu Context = null;
         private static ContextMenuPointLine ContextLine = null;
+        private static ContextMenuPlane ContextPlane = null;
 
         public static readonly List<BobinaProps> Props = new List<BobinaProps>();
         public static readonly List<GraphicsPath> GP = new List<GraphicsPath>();
@@ -23,6 +24,7 @@ namespace ModeloBase.Componente
         public static readonly List<Linha> LinhasPonto = new List<Linha>();
         public static Argument[] Pontos = new Argument[0x2];
         public static PointF[] PontosSegmento = new PointF[] { new PointF(-1, -1), new PointF(-1, -1) };
+        private static MouseEventArgs MouseArgs = null;
 
         private static Bitmap IMG = new Bitmap(80, 80);
         private static Graphics G = Graphics.FromImage(IMG);
@@ -35,6 +37,9 @@ namespace ModeloBase.Componente
         private static int CountFase = 1;
         private static int CountLine = 1;
         private static bool INITIALIZED = false;
+        private static bool CTRL = false;
+        private static bool DRAW_GUIDE_LINE = false;
+        private static bool DRAW_GUIDE_POINT = false;
 
         public static Color LastColorState = Color.Violet;
         public static Color LastPointLineColorState = Color.Black;
@@ -49,15 +54,18 @@ namespace ModeloBase.Componente
             BorderStyle = BorderStyle.FixedSingle;
             BackgroundImageLayout = ImageLayout.Center;
         }
+
         private void Controle_MouseClick(object sender, MouseEventArgs e)
         {
             VerifyClick(e);
         }
+
         protected override void OnResize(EventArgs e)
         {
             Rectangle rect = new Rectangle(0, 0, Width, Height);
             Region = new Region(rect);
         }
+
         public class Linha
         {
             public string Name { get; set; }
@@ -72,6 +80,7 @@ namespace ModeloBase.Componente
             public PointF FistPoint { get; set; }
             public PointF LastPoint { get; set; }
         }
+
         public class Ponto
         {
             public Brush PointColor { get; set; }
@@ -101,6 +110,7 @@ namespace ModeloBase.Componente
                 //empty
             }
         }
+
         public class Configuracoes
         {
             public double ESPACAMENTO_LIVRE = 7d;
@@ -122,10 +132,12 @@ namespace ModeloBase.Componente
             public bool USE_SMOOTH = true;
             public bool DRAW_LATTERS = true;
             public bool CARIMBO = true;
+            public bool TRIFASIC = true;
 
             public string INFO = "ESQUEMA WEG TRIFÁSICO";
+            public string MODEL = "MODELO";
 
-            public Font CARIMBO_FONT = new Font("Arial", 8f, FontStyle.Bold);
+            public Font CARIMBO_FONT = new Font("Consolas", 8f, FontStyle.Bold);
 
             public Color BACKGROUND_COLOR_PLANE = Color.AliceBlue;
             public Color BACKGROUND_COLOR_CARIMBO = Color.Yellow;
@@ -133,6 +145,7 @@ namespace ModeloBase.Componente
             public Color EIXO_Y_COLOR = Color.Red;
 
         }
+
         public class Bobina
         {
             public int Raio = 180;
@@ -150,6 +163,7 @@ namespace ModeloBase.Componente
                 this.Color = Color ?? this.Color;
             }
         }
+
         private void PrepearDraw(int Raio, int Pontos, double Begin, double End, Pen Color = null)
         {
             var Pen = Color ?? new Pen(Brushes.DarkBlue, 3f);
@@ -211,6 +225,7 @@ namespace ModeloBase.Componente
             CharNumber++;
             PontosList.Clear();
         }
+
         private void CreateDrawerObject(int Number, int raio, int pontos, bool Pri = true, Pen Color = null, int ClickIndex = -1)
         {
             double SpaceValue = ConvertToRadius(Parametros.ESPACAMENTO_LIVRE);
@@ -252,6 +267,7 @@ namespace ModeloBase.Componente
                 PositionAngle += TamanhoPorParte + SpaceValue;
             }
         }
+
         private void PrepearSegmentes(int Raio, double StartAngle, double EndAngle, int Number, bool Pri = true, Pen Color = null)
         {
             var Pen = Color ?? new Pen(Brushes.DarkBlue, 3f);
@@ -335,42 +351,51 @@ namespace ModeloBase.Componente
                 }
             }
         }
+
         private double ConvertToRadius(double Degress)
         {
             return Degress * Math.PI / 180;
         }
+
         public Point ConvertPoint(Ponto P)
         {
             return new Point((int)P.PointX, (int)P.PointY);
         }
+
         public PointF ConvertPointF(Ponto P)
         {
             return new PointF((float)P.PointX, (float)P.PointY);
         }
+
         private Ponto GetPoint(double Angle, double Raio, double XCorrectionFactor = 0, double YCorrectionFactor = 0)
         {
             return new Ponto(XCorrectionFactor + Raio * Math.Cos(Angle), YCorrectionFactor - Raio * Math.Sin(Angle));
         }
+
         public void Initialize(Configuracoes ParametrosVar)
         {
             Parametros = ParametrosVar;
             DrawPlane();
         }
+
         public void Initialize(Configuracoes ParametrosVar, Bobina[] Bobina)
         {
             Parametros = ParametrosVar;
             Bobinas = Bobina;
             DrawPlane();
         }
+
         public void Initialize(Bobina[] Bobina)
         {
             Bobinas = Bobina;
             DrawPlane();
         }
+
         public void Initialize()
         {
             DrawPlane();
         }
+
         public void DrawPlane()
         {
             IMG = new Bitmap(Width, Height);
@@ -388,6 +413,7 @@ namespace ModeloBase.Componente
             G.CompositingQuality = CompositingQuality.HighQuality;
             BackgroundImage = IMG;
         }
+
         public static void DrawPoints()
         {
             int Passo = 0;
@@ -423,6 +449,7 @@ namespace ModeloBase.Componente
                     //none
                 }
         }
+
         public static void DrawObject()
         {
             for (int i = 0; i < Props.Count; i++)
@@ -436,7 +463,23 @@ namespace ModeloBase.Componente
                 G.DrawLine(new Pen(LinhasPonto[i].LineColor.Brush, (Parametros.LINE_WIDTH != LinhasPonto[i].LineColor.Width ? LinhasPonto[i].LineColor.Width : Parametros.LINE_WIDTH)), LinhasPonto[i].FistPoint, LinhasPonto[i].LastPoint);
 
             DrawPoints();
+            if (DRAW_GUIDE_LINE)
+            {
+                var Tamanho = Parametros.POINT_SIZE + (Parametros.POINT_SIZE / 6);
+                G.FillEllipse(Brushes.Green, MouseArgs.X - Tamanho / 2, MouseArgs.Y - Tamanho / 2, Tamanho, Tamanho);
+                G.DrawLine(Pens.Green, new Point(MouseArgs.X - 200, MouseArgs.Y), new Point(MouseArgs.X + 200, MouseArgs.Y));
+                G.DrawLine(Pens.Green, new Point(MouseArgs.X, MouseArgs.Y - 200), new Point(MouseArgs.X, MouseArgs.Y + 200));
+                DRAW_GUIDE_LINE = false;
+            }
+
+            if (DRAW_GUIDE_POINT)
+            {
+                var Tamanho = Parametros.POINT_SIZE + (Parametros.POINT_SIZE / 6);
+                G.FillEllipse(Brushes.Green, MouseArgs.X - Tamanho / 2, MouseArgs.Y - Tamanho / 2, Tamanho, Tamanho);
+                DRAW_GUIDE_POINT = false;
+            }
         }
+
         public void DrawImage(int ClickIndex = -1)
         {
             if (INITIALIZED == false)
@@ -517,6 +560,7 @@ namespace ModeloBase.Componente
                     DrawCarimbo();
             }
         }
+
         public void DrawCarimbo()
         {
             Point InitPoint = new Point(Width - Parametros.CARIMBO_WIDTH, Height - Parametros.CARIMBO_HEIGHT);
@@ -536,8 +580,8 @@ namespace ModeloBase.Componente
             G.DrawLine(new Pen(Brushes.Black, 1f), new PointF(InitPoint.X + (Width - InitPoint.X) / 2, InitPoint.Y + Position), new PointF(InitPoint.X + (Width - InitPoint.X) / 2, InitPoint.Y + Position + Incremento));
             Position = Incremento;
 
-            G.DrawString("RX657 - N6", Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3, InitPoint.Y + Incremento + Position / 4);
-            G.DrawString("TRIFÁSICO", Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3 + (Width - InitPoint.X) / 2, InitPoint.Y + Incremento + Position / 4);
+            G.DrawString(Parametros.MODEL, Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3, InitPoint.Y + Incremento + Position / 4);
+            G.DrawString(Parametros.TRIFASIC ? "TRIFÁSICO" : "MONOFÁSICO", Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3 + (Width - InitPoint.X) / 2, InitPoint.Y + Incremento + Position / 4);
             Position = Incremento;
 
             G.DrawLine(new Pen(Brushes.Black, 1f), new PointF(InitPoint.X, InitPoint.Y + 2 * Incremento + Position), new PointF(Width, InitPoint.Y + 2 * Incremento + Position));
@@ -561,6 +605,7 @@ namespace ModeloBase.Componente
             G.DrawString(DateTime.Today.ToLongDateString(), Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3, InitPoint.Y + Incremento + 2 * Position + (Incremento / 4));
 
         }
+
         public void VerifyClick(MouseEventArgs e)
         {
             Initialize();
@@ -598,19 +643,49 @@ namespace ModeloBase.Componente
                         index = i;
                         break;
                     }
+
+                    if (PontosSegmento[0].X != -1 && CTRL)
+                        index = 0;
                 }
 
                 if (index != -1)
                 {
-                    if (PontosSegmento[0].X == -1 && PontosSegmento[1].X == -1)
+                    if (PontosSegmento[0].X == -1 && PontosSegmento[1].X == -1 && CTRL == false)
                     {
                         PontosSegmento[0] = new PointF(e.X, e.Y);
-                        Cursor = Cursors.Hand;
+                        Cursor = Cursors.Cross;
+
+                        MouseArgs = e;
+                        DRAW_GUIDE_POINT = true;
+                    }
+                    else if (PontosSegmento[0].X == -1 && PontosSegmento[1].X == -1 && CTRL == true)
+                    {
+                        PontosSegmento[0] = new PointF(e.X, e.Y);
+                        Cursor = Cursors.Cross;
+
+                        MouseArgs = e;
+                        DRAW_GUIDE_LINE = true;
                     }
                     else if (PontosSegmento[0].X != -1 && PontosSegmento[1].X == -1)
                     {
-                        if (Math.Abs(PontosSegmento[0].X - e.X) > Parametros.POINT_MARGIN && Math.Abs(PontosSegmento[0].Y - e.Y) > Parametros.POINT_MARGIN)
-                            PontosSegmento[1] = new PointF(e.X, e.Y);
+                        if (Math.Abs(e.X + (Parametros.POINT_MARGIN / 2)) > Parametros.POINT_MARGIN && Math.Abs(e.Y + (Parametros.POINT_MARGIN / 2)) > Parametros.POINT_MARGIN)
+                        {
+                            if (CTRL)
+                            {
+                                var Dx = Math.Abs(PontosSegmento[0].X - e.X);
+                                var Dy = Math.Abs(PontosSegmento[0].Y - e.Y);
+
+                                if (Dx > Dy)
+                                    PontosSegmento[1] = new PointF(e.X, PontosSegmento[0].Y);
+                                else if (Dx < Dy)
+                                    PontosSegmento[1] = new PointF(PontosSegmento[0].X, e.Y);
+                                else if (Dx == Dy)
+                                    PontosSegmento[1] = new PointF(e.X, e.Y);
+
+                            }
+                            else
+                                PontosSegmento[1] = new PointF(e.X, e.Y);
+                        }
                         else
                         {
                             Cursor = Cursors.Default;
@@ -660,8 +735,11 @@ namespace ModeloBase.Componente
                 ShowContext(e, index, 0);
             else if (e.Button == MouseButtons.Right && index2 != -1)
                 ShowContext(e, index2, 1);
+            else if (e.Button == MouseButtons.Right && index == -1)
+                ShowContext(e, index, 2);
 
         }
+
         public static void UpdateObjectList(int Index, Color Cor)
         {
             LastColorState = Props[Index].Pens;
@@ -674,6 +752,7 @@ namespace ModeloBase.Componente
                 Pontos[Positions[0]].Pontos[Positions[1] + i].PointColor = Linhas[Index].LineColor.Brush;
 
         }
+
         public void GoBackState(int LastIndex)
         {
             Props[LastIndex].Pens = LastColorState;
@@ -683,6 +762,7 @@ namespace ModeloBase.Componente
             for (int i = 0; i < 2; i++)
                 Pontos[Positions[0]].Pontos[Positions[1] + i].PointColor = Linhas[LastIndex].LineColor.Brush;
         }
+
         private static int[] GetBobinaIndexAndPoint(int Index)
         {
             int[] Info = new int[] { -1, -1 };
@@ -699,6 +779,7 @@ namespace ModeloBase.Componente
 
             return Info;
         }
+
         private void ShowContext(MouseEventArgs e, int Index, int Model)
         {
             if (Model == 0)
@@ -715,13 +796,20 @@ namespace ModeloBase.Componente
                 ContextLine = new ContextMenuPointLine(Index, Width, Height);
                 ContextLine.contextMenu.Show(this, e.Location);
             }
+            else if (Model == 2)
+            {
+                ContextPlane = new ContextMenuPlane(Width, Height);
+                ContextPlane.contextMenu.Show(this, e.Location);
+            }
         }
+
         public void Reload()
         {
             Parametros = new Configuracoes();
             Bobinas = new Bobina[0x2];
             Context = null;
             ContextLine = null;
+            ContextPlane = null;
 
             if (GP.Count > 0)
                 for (int i = GP.Count - 1; i > -1; i--)
@@ -758,10 +846,30 @@ namespace ModeloBase.Componente
             CountLine = 1;
             INITIALIZED = false;
         }
+
+        private void Controle_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyValue == 17)
+            {
+                Cursor = Cursors.Cross;
+                CTRL = true;
+            }
+        }
+
+        private void Controle_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyValue == 17)
+            {
+                Cursor = Cursors.Default;
+                CTRL = false;
+            }
+        }
+
         public Image GetImage()
         {
             return IMG;
         }
+
         public class BobinaProps
         {
             public char Latters { get; set; }
@@ -800,7 +908,7 @@ namespace ModeloBase.Componente
         { Bobinas = Bobina; }
         public bool IsInitialized() { return INITIALIZED; }
 
-        #endregion
+        #endregion       
     }
 
     #region CLASSRegion
@@ -869,8 +977,10 @@ namespace ModeloBase.Componente
         {
             var editarItem = new ToolStripMenuItem("Editar");
             var apagarItem = new ToolStripMenuItem("Apagar");
-            var propriedadesItem = new ToolStripMenuItem("Propriedades");
+            var propriedadesItem = new ToolStripMenuItem("Propriedades (Bobina)");
 
+            editarItem.Enabled = false;
+            apagarItem.Enabled = false;
             editarItem.Click += EditarItem_Click;
             apagarItem.Click += ApagarItem_Click;
             propriedadesItem.Click += PropriedadesItem_Click;
@@ -924,7 +1034,7 @@ namespace ModeloBase.Componente
         public ContextMenuPointLine(int Index, int w, int h)
         {
             var apagarItem = new ToolStripMenuItem("Apagar");
-            var propriedadesItem = new ToolStripMenuItem("Propriedades");
+            var propriedadesItem = new ToolStripMenuItem("Propriedades (Linha)");
 
             apagarItem.Click += ApagarItem_Click;
             propriedadesItem.Click += PropriedadesItem_Click;
@@ -951,6 +1061,35 @@ namespace ModeloBase.Componente
             Controle.LinhasPonto.RemoveAt(Index);
             Controle.LGP.RemoveAt(Index);
             Controle.LastPointLineSelected = -1;
+        }
+
+        public void Dispose()
+        {
+            ((IDisposable)contextMenu).Dispose();
+        }
+    }
+
+    class ContextMenuPlane : IDisposable
+    {
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public ContextMenuStrip contextMenu = new ContextMenuStrip();
+
+        public ContextMenuPlane(int w, int h)
+        {
+            var propriedadesItem = new ToolStripMenuItem("Propriedades (Plano)");
+            propriedadesItem.Click += PropriedadesItem_Click;
+            contextMenu.Items.Add(propriedadesItem);
+
+            Width = w;
+            Height = h;
+        }
+
+        private void PropriedadesItem_Click(object sender, EventArgs e)
+        {
+            PlaneProps Props = new PlaneProps(Controle.Parametros, new int[] { Height, Width });
+            Props.ShowDialog();
+            Props.Dispose();
         }
 
         public void Dispose()
