@@ -12,28 +12,29 @@ namespace ModeloBase.Componente
         public SmoothBazier AlgoritmoBazier = new SmoothBazier();
         public static Configuracoes Parametros = new Configuracoes();
         public static Bobina[] Bobinas = new Bobina[0x2];
-        private ContextMenu Context = null;
-        private ContextMenuPointLine ContextLine = null;
+        private static ContextMenu Context = null;
+        private static ContextMenuPointLine ContextLine = null;
 
         public static readonly List<BobinaProps> Props = new List<BobinaProps>();
         public static readonly List<GraphicsPath> GP = new List<GraphicsPath>();
         public static readonly List<GraphicsPath> PGP = new List<GraphicsPath>();
         public static readonly List<GraphicsPath> LGP = new List<GraphicsPath>();
-        public static readonly Argument[] Pontos = new Argument[0x2];
         public static readonly List<Linha> Linhas = new List<Linha>();
         public static readonly List<Linha> LinhasPonto = new List<Linha>();
-        public static readonly PointF[] PontosSegmento = new PointF[] { new PointF(-1, -1), new PointF(-1, -1) };
+        public static Argument[] Pontos = new Argument[0x2];
+        public static PointF[] PontosSegmento = new PointF[] { new PointF(-1, -1), new PointF(-1, -1) };
 
         private static Bitmap IMG = new Bitmap(80, 80);
         private static Graphics G = Graphics.FromImage(IMG);
 
         public static int LastPointLineSelected = -1;
         public static int SelectedIndex = -1;
-        private int LastSelectedIndex = -1;
-        private int CharNumber = 65;
-        private int CountFase = 1;
-        private int CountLine = 1;
-        private bool INITIALIZED = false;
+
+        private static int LastSelectedIndex = -1;
+        private static int CharNumber = 65; // (char)CharNumber => 'A' | ASCII
+        private static int CountFase = 1;
+        private static int CountLine = 1;
+        private static bool INITIALIZED = false;
 
         public static Color LastColorState = Color.Violet;
         public static Color LastPointLineColorState = Color.Black;
@@ -57,7 +58,7 @@ namespace ModeloBase.Componente
             Rectangle rect = new Rectangle(0, 0, Width, Height);
             Region = new Region(rect);
         }
-        public partial class Linha
+        public class Linha
         {
             public string Name { get; set; }
             public string ID { get; set; }
@@ -71,7 +72,7 @@ namespace ModeloBase.Componente
             public PointF FistPoint { get; set; }
             public PointF LastPoint { get; set; }
         }
-        public partial class Ponto
+        public class Ponto
         {
             public Brush PointColor { get; set; }
             public float PointSize { get; set; }
@@ -100,7 +101,7 @@ namespace ModeloBase.Componente
                 //empty
             }
         }
-        public partial class Configuracoes
+        public class Configuracoes
         {
             public double ESPACAMENTO_LIVRE = 7d;
             public double FATOR_CORRECAO_BAIXO = 10d;
@@ -108,7 +109,8 @@ namespace ModeloBase.Componente
             public double FATOR_CORRECAO_RAIO_MAIOR = 0.10d;
             public double FATOR_CORRECAO_RAIO_MENOR = 0.08d;
 
-
+            public int CARIMBO_WIDTH = 180;
+            public int CARIMBO_HEIGHT = 90;
             public int FATOR_CORRECAO_DECREMENTO = 4;
             public int FATOR_CORRECAO_LIMITACAO = 8;
             public int POINT_SIZE = 10;
@@ -119,8 +121,19 @@ namespace ModeloBase.Componente
 
             public bool USE_SMOOTH = true;
             public bool DRAW_LATTERS = true;
+            public bool CARIMBO = true;
+
+            public string INFO = "ESQUEMA WEG TRIFÁSICO";
+
+            public Font CARIMBO_FONT = new Font("Arial", 8f, FontStyle.Bold);
+
+            public Color BACKGROUND_COLOR_PLANE = Color.AliceBlue;
+            public Color BACKGROUND_COLOR_CARIMBO = Color.Yellow;
+            public Color EIXO_X_COLOR = Color.Blue;
+            public Color EIXO_Y_COLOR = Color.Red;
+
         }
-        public partial class Bobina
+        public class Bobina
         {
             public int Raio = 180;
             public int Bobinas = 4;
@@ -369,9 +382,9 @@ namespace ModeloBase.Componente
             }
 
             G.PageUnit = GraphicsUnit.Pixel;
-            G.FillRectangle(Brushes.AliceBlue, new Rectangle(0, 0, Width, Height));
-            G.DrawLine(Pens.Black, new Point(0, Height / 2), new Point(Width, Height / 2));
-            G.DrawLine(Pens.Black, new Point(Width / 2, 0), new Point(Width / 2, Height));
+            G.FillRectangle(new SolidBrush(Parametros.BACKGROUND_COLOR_PLANE), new Rectangle(0, 0, Width, Height));
+            G.DrawLine(new Pen(new SolidBrush(Parametros.EIXO_X_COLOR)), new Point(0, Height / 2), new Point(Width, Height / 2));
+            G.DrawLine(new Pen(new SolidBrush(Parametros.EIXO_Y_COLOR)), new Point(Width / 2, 0), new Point(Width / 2, Height));
             G.CompositingQuality = CompositingQuality.HighQuality;
             BackgroundImage = IMG;
         }
@@ -380,27 +393,34 @@ namespace ModeloBase.Componente
             int Passo = 0;
             int Count = 1;
             foreach (var T in Pontos)
-                if (T.Pontos.Count > 0)
+                try
                 {
-                    foreach (var P in T.Pontos)
+                    if (T.Pontos.Count > 0)
                     {
-                        int x = (int)P.PointX;
-                        int y = (int)P.PointY;
-                        int tamanho = (int)P.PointSize;
-
-                        G.FillEllipse(P.PointColor, x - tamanho / 2, y - tamanho / 2, tamanho, tamanho);
-                        string TXT = Passo == 0 ? $"C{Count}" : $"F{Count}";
-                        if (Passo == 0)
-                            Passo = 1;
-                        else if (Passo == 1)
+                        foreach (var P in T.Pontos)
                         {
-                            Passo = 0;
-                            Count++;
-                        }
+                            int x = (int)P.PointX;
+                            int y = (int)P.PointY;
+                            int tamanho = (int)P.PointSize;
 
-                        if (Parametros.DRAW_LATTERS)
-                            G.DrawString(TXT, new Font("Consolas", 10f, FontStyle.Bold), Brushes.Black, x + tamanho / 2, y - tamanho);
+                            G.FillEllipse(P.PointColor, x - tamanho / 2, y - tamanho / 2, tamanho, tamanho);
+                            string TXT = Passo == 0 ? $"C{Count}" : $"F{Count}";
+                            if (Passo == 0)
+                                Passo = 1;
+                            else if (Passo == 1)
+                            {
+                                Passo = 0;
+                                Count++;
+                            }
+
+                            if (Parametros.DRAW_LATTERS)
+                                G.DrawString(TXT, new Font("Consolas", 10f, FontStyle.Bold), Brushes.Black, x + tamanho / 2, y - tamanho);
+                        }
                     }
+                }
+                catch
+                {
+                    //none
                 }
         }
         public static void DrawObject()
@@ -439,21 +459,32 @@ namespace ModeloBase.Componente
                         CreateDrawerObject(B.Bobinas, B.Raio, Parametros.RENDER_POINTS, B.Funcao == Type.Primaria, B.Color, ClickIndex);
 
                 foreach (var T in Pontos)
-                    if (T.Pontos.Count > 0)
+                    try
                     {
-                        foreach (var P in T.Pontos)
+                        if (T.Pontos.Count > 0)
                         {
-                            int x = (int)P.PointX;
-                            int y = (int)P.PointY;
-                            int tamanho = (int)P.PointSize;
-                            GraphicsPath VAR = new GraphicsPath();
-                            VAR.AddEllipse(x - tamanho / 2, y - tamanho / 2, tamanho, tamanho);
-                            PGP.Add(VAR);
+                            foreach (var P in T.Pontos)
+                            {
+                                int x = (int)P.PointX;
+                                int y = (int)P.PointY;
+                                int tamanho = (int)P.PointSize;
+                                GraphicsPath VAR = new GraphicsPath();
+                                VAR.AddEllipse(x - tamanho / 2, y - tamanho / 2, tamanho, tamanho);
+                                PGP.Add(VAR);
+                            }
                         }
                     }
+                    catch
+                    {
+                        //none
+                    }
+
 
                 DrawObject();
                 INITIALIZED = true;
+
+                if (Parametros.CARIMBO)
+                    DrawCarimbo();
             }
             else
             {
@@ -481,26 +512,58 @@ namespace ModeloBase.Componente
                     DrawObject();
                     LastSelectedIndex = ClickIndex;
                 }
+
+                if (Parametros.CARIMBO)
+                    DrawCarimbo();
             }
+        }
+        public void DrawCarimbo()
+        {
+            Point InitPoint = new Point(Width - Parametros.CARIMBO_WIDTH, Height - Parametros.CARIMBO_HEIGHT);
+            Point FinalPoint = new Point(Width, Height);
+            var REC = new Rectangle(InitPoint.X, InitPoint.Y, FinalPoint.X, FinalPoint.Y);
+
+            G.FillRectangle(new SolidBrush(Parametros.BACKGROUND_COLOR_CARIMBO), REC);
+            G.DrawRectangle(new Pen(Brushes.Black, 1f), REC);
+            float Incremento = Parametros.CARIMBO_HEIGHT / 4;
+            float Position = 0f;
+
+            G.DrawLine(new Pen(Brushes.Black, 1f), new PointF(InitPoint.X, InitPoint.Y + Incremento + Position), new PointF(Width, InitPoint.Y + Incremento + Position));
+            G.DrawString(Parametros.INFO, Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3, InitPoint.Y + Incremento / 4);
+            Position = Incremento;
+            G.DrawLine(new Pen(Brushes.Black, 1f), new PointF(InitPoint.X, InitPoint.Y + Incremento + Position), new PointF(Width, InitPoint.Y + Incremento + Position));
+            Position = Incremento;
+            G.DrawLine(new Pen(Brushes.Black, 1f), new PointF(InitPoint.X + (Width - InitPoint.X) / 2, InitPoint.Y + Position), new PointF(InitPoint.X + (Width - InitPoint.X) / 2, InitPoint.Y + Position + Incremento));
+            Position = Incremento;
+
+            G.DrawString("RX657 - N6", Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3, InitPoint.Y + Incremento + Position / 4);
+            G.DrawString("TRIFÁSICO", Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3 + (Width - InitPoint.X) / 2, InitPoint.Y + Incremento + Position / 4);
+            Position = Incremento;
+
+            G.DrawLine(new Pen(Brushes.Black, 1f), new PointF(InitPoint.X, InitPoint.Y + 2 * Incremento + Position), new PointF(Width, InitPoint.Y + 2 * Incremento + Position));
+            Position = Incremento;
+            G.DrawLine(new Pen(Brushes.Black, 1f), new PointF(InitPoint.X + (Width - InitPoint.X) / 2, InitPoint.Y + 2 * Position), new PointF(InitPoint.X + (Width - InitPoint.X) / 2, InitPoint.Y + 2 * Position + Incremento));
+            Position = Incremento;
+
+            G.DrawString($"PRI. {Bobinas[0].Bobinas}", Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3, InitPoint.Y + Incremento + Position + (Position / 4));
+            try
+            {
+                G.DrawString($"AUX. {Bobinas[1].Bobinas}", Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3 + (Width - InitPoint.X) / 2, InitPoint.Y + Incremento + Position + (Position / 4));
+
+            }
+            catch
+            {
+                G.DrawString($"AUX. ---", Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3 + (Width - InitPoint.X) / 2, InitPoint.Y + Incremento + Position + (Position / 4));
+
+            }
+
+            Position = Incremento;
+            G.DrawString(DateTime.Today.ToLongDateString(), Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3, InitPoint.Y + Incremento + 2 * Position + (Incremento / 4));
+
         }
         public void VerifyClick(MouseEventArgs e)
         {
             Initialize();
-            Bobinas[0] = new Bobina()
-            {
-                Raio = 230,
-                Color = new Pen(Brushes.DarkBlue, 2f),
-                Bobinas = 12
-            };
-
-            Bobinas[1] = new Bobina()
-            {
-                Raio = 150,
-                Color = new Pen(Brushes.Red, 2f),
-                Funcao = Type.Auxiliar,
-                Bobinas = 12
-            };
-
             PointF P = new PointF(e.X, e.Y);
             int index = -1, index2 = -1;
 
@@ -653,6 +716,52 @@ namespace ModeloBase.Componente
                 ContextLine.contextMenu.Show(this, e.Location);
             }
         }
+        public void Reload()
+        {
+            Parametros = new Configuracoes();
+            Bobinas = new Bobina[0x2];
+            Context = null;
+            ContextLine = null;
+
+            if (GP.Count > 0)
+                for (int i = GP.Count - 1; i > -1; i--)
+                    GP.RemoveAt(i);
+
+            if (LGP.Count > 0)
+                for (int i = LGP.Count - 1; i > -1; i--)
+                    LGP.RemoveAt(i);
+
+            if (PGP.Count > 0)
+                for (int i = PGP.Count - 1; i > -1; i--)
+                    PGP.RemoveAt(i);
+
+            if (Linhas.Count > 0)
+                for (int i = Linhas.Count - 1; i > -1; i--)
+                    Linhas.RemoveAt(i);
+
+            if (Props.Count > 0)
+                for (int i = Props.Count - 1; i > -1; i--)
+                    Props.RemoveAt(i);
+
+            if (LinhasPonto.Count > 0)
+                for (int i = LinhasPonto.Count - 1; i > -1; i--)
+                    LinhasPonto.RemoveAt(i);
+
+            Pontos = new Argument[0x2];
+            PontosSegmento = new PointF[] { new PointF(-1, -1), new PointF(-1, -1) };
+
+            LastPointLineSelected = -1;
+            SelectedIndex = -1;
+            LastSelectedIndex = -1;
+            CharNumber = 65;
+            CountFase = 1;
+            CountLine = 1;
+            INITIALIZED = false;
+        }
+        public Image GetImage()
+        {
+            return IMG;
+        }
         public class BobinaProps
         {
             public char Latters { get; set; }
@@ -661,6 +770,8 @@ namespace ModeloBase.Componente
             public Color Pens { get; set; }
             public float Espec { get; set; }
         }
+
+        #region FlagsStruct
 
         public struct Argument
         {
@@ -681,9 +792,20 @@ namespace ModeloBase.Componente
             Primaria = 0,
             Auxiliar = 1
         }
+
+        #endregion
+
+        #region Acessos
+        public void SetBobinas(Bobina[] Bobina)
+        { Bobinas = Bobina; }
+        public bool IsInitialized() { return INITIALIZED; }
+
+        #endregion
     }
 
-    public partial class SmoothBazier
+    #region CLASSRegion
+
+    public class SmoothBazier
     {
         public List<PointF> SmoothCurve(List<PointF> points)
         {
@@ -736,7 +858,7 @@ namespace ModeloBase.Componente
         }
     }
 
-    partial class ContextMenu : IDisposable
+    class ContextMenu : IDisposable
     {
         public int ExitCode { get; set; }
         public int Index { get; set; }
@@ -791,7 +913,7 @@ namespace ModeloBase.Componente
         }
     }
 
-    partial class ContextMenuPointLine : IDisposable
+    class ContextMenuPointLine : IDisposable
     {
         public int ExitCode { get; set; }
         public int Index { get; set; }
@@ -836,4 +958,6 @@ namespace ModeloBase.Componente
             ((IDisposable)contextMenu).Dispose();
         }
     }
+
+    #endregion
 }

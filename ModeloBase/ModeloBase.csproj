@@ -58,6 +58,12 @@
     <Compile Include="Componente\LineProps.Designer.cs">
       <DependentUpon>LineProps.cs</DependentUpon>
     </Compile>
+    <Compile Include="Componente\PlaneProps.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Componente\PlaneProps.Designer.cs">
+      <DependentUpon>PlaneProps.cs</DependentUpon>
+    </Compile>
     <Compile Include="Componente\Prop.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -87,6 +93,9 @@
     </Compile>
     <EmbeddedResource Include="Componente\LineProps.resx">
       <DependentUpon>LineProps.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Componente\PlaneProps.resx">
+      <DependentUpon>PlaneProps.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Componente\Prop.resx">
       <DependentUpon>Prop.cs</DependentUpon>

@@ -202,6 +202,7 @@
             this.panel1.Controls.Add(this.X1);
             this.panel1.Controls.Add(this.label5);
             this.panel1.Controls.Add(this.Y1);
+            this.panel1.Enabled = false;
             this.panel1.Location = new System.Drawing.Point(16, 132);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(120, 86);
@@ -213,6 +214,7 @@
             this.panel2.Controls.Add(this.X2);
             this.panel2.Controls.Add(this.label6);
             this.panel2.Controls.Add(this.Y2);
+            this.panel2.Enabled = false;
             this.panel2.Location = new System.Drawing.Point(142, 132);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(120, 86);
