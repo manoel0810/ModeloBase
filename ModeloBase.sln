@@ -5,6 +5,10 @@ VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModeloBase", "ModeloBase\ModeloBase.csproj", "{39665336-A00A-496A-988C-81A101A52D6E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoSchematic", "AutoSchematic\AutoSchematic.csproj", "{C4529F95-74A5-4685-B58F-9AB4A0386EB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DllTeste", "DllTeste\DllTeste.csproj", "{EC1E2D3B-447E-4B7A-AF56-B2015FDD5ABD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{39665336-A00A-496A-988C-81A101A52D6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39665336-A00A-496A-988C-81A101A52D6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39665336-A00A-496A-988C-81A101A52D6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4529F95-74A5-4685-B58F-9AB4A0386EB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4529F95-74A5-4685-B58F-9AB4A0386EB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4529F95-74A5-4685-B58F-9AB4A0386EB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4529F95-74A5-4685-B58F-9AB4A0386EB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC1E2D3B-447E-4B7A-AF56-B2015FDD5ABD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC1E2D3B-447E-4B7A-AF56-B2015FDD5ABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC1E2D3B-447E-4B7A-AF56-B2015FDD5ABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC1E2D3B-447E-4B7A-AF56-B2015FDD5ABD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

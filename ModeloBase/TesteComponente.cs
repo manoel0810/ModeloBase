@@ -16,7 +16,7 @@ namespace ModeloBase
         {
             if (controle1.IsInitialized())
             {
-                controle1.Reload();
+                controle1.Reload(false);
                 MessageBox.Show("Controle recarregado");
             }
             else

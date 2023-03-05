@@ -632,7 +632,7 @@ namespace ModeloBase.Componente
             int YIteratorSubSegment = Parametros.Y_LEGEND_SUB_ITERATOR;
             int XPosition = Parametros.X_LEGEND_START;
 
-            foreach(var item in LinhasPonto)
+            foreach (var item in LinhasPonto)
             {
                 if (item.Legend)
                 {
@@ -649,7 +649,6 @@ namespace ModeloBase.Componente
             Initialize();
             PointF P = new PointF(e.X, e.Y);
             int index = -1, index2 = -1;
-
             int ACC1 = -1, ACC2 = -1;
 
             try
@@ -659,10 +658,15 @@ namespace ModeloBase.Componente
             }
             catch
             {
+                MessageBox.Show("Objeto não carregado com êxito. Repasse os parâmetros corretos antes da pré renderização", "Erro de inicialização", MessageBoxButtons.OK, MessageBoxIcon.Error); ;
+                return;
+
+                /*
                 if (ACC1 == -1 && ACC2 == -1)
                     throw new Exception("Objeto não inicializado corretamente para a renderização do plano. Paramentros:\n{ACC1 = ACC2 = -1}");
                 else if (ACC1 == -1 && ACC2 != -1)
                     throw new Exception("Objeto não inicializado corretamente para a renderização do plano. Preferência de entrada errada. Paramentros:\n{ACC1 = -1; ACC2 != -1}");
+                */
             }
 
 
@@ -858,9 +862,9 @@ namespace ModeloBase.Componente
 
         public void Reload(bool ReloadProps = true)
         {
-            if(ReloadProps)
+            if (ReloadProps)
                 Parametros = new Configuracoes();
-            
+
             Bobinas = new Bobina[0x2];
             Context = null;
             ContextLine = null;
