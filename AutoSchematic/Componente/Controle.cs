@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoSchematic.Componente;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -151,6 +152,7 @@ namespace ModeloBase.Componente
             public string MODEL = "MODELO";
 
             public Font CARIMBO_FONT = new Font("Consolas", 8f, FontStyle.Bold);
+            public DateFormt DateFormat = DateFormt.Long;
 
             public Color BACKGROUND_COLOR_PLANE = Color.AliceBlue;
             public Color BACKGROUND_COLOR_CARIMBO = Color.Yellow;
@@ -169,6 +171,11 @@ namespace ModeloBase.Componente
 
             public Bobina(int Raio, int Bobinas, Type Funcao = Type.Primaria, Pen Color = null)
             {
+                if (Raio == 0)
+                    throw new AutoSchematicArgumentException("The radius of the circle must be greater than zero", "Raio");
+                else if (Bobinas == 0)
+                    throw new AutoSchematicArgumentException("the number of coils must be greater than zero", "Bobinas");
+
                 this.Raio = Raio;
                 this.Bobinas = Bobinas;
                 this.Funcao = Funcao;
@@ -371,11 +378,17 @@ namespace ModeloBase.Componente
 
         public Point ConvertPoint(Ponto P)
         {
+            if (P == null)
+                throw new AutoSchematicArgumentNullException("P");
+
             return new Point((int)P.PointX, (int)P.PointY);
         }
 
         public PointF ConvertPointF(Ponto P)
         {
+            if (P == null)
+                throw new AutoSchematicArgumentNullException("P");
+
             return new PointF((float)P.PointX, (float)P.PointY);
         }
 
@@ -383,6 +396,8 @@ namespace ModeloBase.Componente
         {
             return new Ponto(XCorrectionFactor + Raio * Math.Cos(Angle), YCorrectionFactor - Raio * Math.Sin(Angle));
         }
+
+        #region Initializations
 
         public void Initialize(Configuracoes ParametrosVar)
         {
@@ -407,6 +422,9 @@ namespace ModeloBase.Componente
         {
             DrawPlane();
         }
+
+
+        #endregion
 
         public void DrawPlane()
         {
@@ -608,20 +626,27 @@ namespace ModeloBase.Componente
             G.DrawLine(new Pen(Brushes.Black, 1f), new PointF(InitPoint.X + (Width - InitPoint.X) / 2, InitPoint.Y + 2 * Position), new PointF(InitPoint.X + (Width - InitPoint.X) / 2, InitPoint.Y + 2 * Position + Incremento));
             Position = Incremento;
 
-            G.DrawString($"PRI. {Bobinas[0].Bobinas}", Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3, InitPoint.Y + Incremento + Position + (Position / 4));
+            try
+            {
+                G.DrawString($"PRI. {Bobinas[0].Bobinas}", Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3, InitPoint.Y + Incremento + Position + (Position / 4));
+            }
+            catch (Exception)
+            {
+                throw new AutoSchematicArgumentNullException("Bobinas[0]", "Array of type 'Coils' not loaded for current instance");
+            }
+
             try
             {
                 G.DrawString($"AUX. {Bobinas[1].Bobinas}", Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3 + (Width - InitPoint.X) / 2, InitPoint.Y + Incremento + Position + (Position / 4));
-
             }
             catch
             {
                 G.DrawString($"AUX. ---", Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3 + (Width - InitPoint.X) / 2, InitPoint.Y + Incremento + Position + (Position / 4));
-
             }
 
             Position = Incremento;
-            G.DrawString(DateTime.Today.ToLongDateString(), Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3, InitPoint.Y + Incremento + 2 * Position + (Incremento / 4));
+            string Date = Parametros.DateFormat == DateFormt.Long ? DateTime.Now.ToLongDateString() : DateTime.Now.ToShortDateString();
+            G.DrawString(Date, Parametros.CARIMBO_FONT, Brushes.Black, InitPoint.X + 3, InitPoint.Y + Incremento + 2 * Position + (Incremento / 4));
 
         }
 
@@ -644,7 +669,7 @@ namespace ModeloBase.Componente
             }
         }
 
-        public void VerifyClick(MouseEventArgs e)
+        private void VerifyClick(MouseEventArgs e)
         {
             Initialize();
             PointF P = new PointF(e.X, e.Y);
@@ -658,15 +683,8 @@ namespace ModeloBase.Componente
             }
             catch
             {
-                MessageBox.Show("Objeto não carregado com êxito. Repasse os parâmetros corretos antes da pré renderização", "Erro de inicialização", MessageBoxButtons.OK, MessageBoxIcon.Error); ;
-                return;
-
-                /*
-                if (ACC1 == -1 && ACC2 == -1)
-                    throw new Exception("Objeto não inicializado corretamente para a renderização do plano. Paramentros:\n{ACC1 = ACC2 = -1}");
-                else if (ACC1 == -1 && ACC2 != -1)
-                    throw new Exception("Objeto não inicializado corretamente para a renderização do plano. Preferência de entrada errada. Paramentros:\n{ACC1 = -1; ACC2 != -1}");
-                */
+                if (ACC1 == 0 && ACC2 == 0)
+                    throw new AutoSchematicArgumentException("Object 'Coil' to render was not passed or is invalid. At least one argument was expected", "ACC1/ACC2");
             }
 
 
@@ -958,6 +976,11 @@ namespace ModeloBase.Componente
         {
             Primaria = 0,
             Auxiliar = 1
+        }
+        public enum DateFormt : int
+        {
+            Long,
+            Short
         }
 
         #endregion

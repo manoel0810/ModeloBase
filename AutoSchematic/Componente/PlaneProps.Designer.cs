@@ -72,6 +72,20 @@
             this.label1 = new System.Windows.Forms.Label();
             this.PainelCorFundo = new System.Windows.Forms.Panel();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label29 = new System.Windows.Forms.Label();
+            this.PainelProps2 = new System.Windows.Forms.Panel();
+            this.Cb_UsarBazier = new System.Windows.Forms.CheckBox();
+            this.Cb_DescreverPonto = new System.Windows.Forms.CheckBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.PainelProps1 = new System.Windows.Forms.Panel();
+            this.NunBazierIterations = new System.Windows.Forms.NumericUpDown();
+            this.NunPointMargin = new System.Windows.Forms.NumericUpDown();
+            this.label28 = new System.Windows.Forms.Label();
+            this.label26 = new System.Windows.Forms.Label();
+            this.NunRenderPoints = new System.Windows.Forms.NumericUpDown();
+            this.label27 = new System.Windows.Forms.Label();
+            this.NunPointSize = new System.Windows.Forms.NumericUpDown();
+            this.label25 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.PainelCorrecoes = new System.Windows.Forms.Panel();
             this.label21 = new System.Windows.Forms.Label();
@@ -90,20 +104,9 @@
             this.NumEspacoLivre = new System.Windows.Forms.NumericUpDown();
             this.ColorPic = new System.Windows.Forms.ColorDialog();
             this.FontPic = new System.Windows.Forms.FontDialog();
-            this.PainelProps1 = new System.Windows.Forms.Panel();
-            this.label24 = new System.Windows.Forms.Label();
-            this.NunPointSize = new System.Windows.Forms.NumericUpDown();
-            this.label25 = new System.Windows.Forms.Label();
-            this.label26 = new System.Windows.Forms.Label();
-            this.NunPointMargin = new System.Windows.Forms.NumericUpDown();
-            this.label27 = new System.Windows.Forms.Label();
-            this.NunRenderPoints = new System.Windows.Forms.NumericUpDown();
-            this.label28 = new System.Windows.Forms.Label();
-            this.NunBazierIterations = new System.Windows.Forms.NumericUpDown();
-            this.PainelProps2 = new System.Windows.Forms.Panel();
-            this.label29 = new System.Windows.Forms.Label();
-            this.Cb_DescreverPonto = new System.Windows.Forms.CheckBox();
-            this.Cb_UsarBazier = new System.Windows.Forms.CheckBox();
+            this.LongFormat = new System.Windows.Forms.RadioButton();
+            this.ShortFormat = new System.Windows.Forms.RadioButton();
+            this.label30 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.PropriedadesPage.SuspendLayout();
             this.PainelLegend.SuspendLayout();
@@ -117,6 +120,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.NunWidth)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NunHeight)).BeginInit();
             this.tabPage1.SuspendLayout();
+            this.PainelProps2.SuspendLayout();
+            this.PainelProps1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NunBazierIterations)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NunPointMargin)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NunRenderPoints)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NunPointSize)).BeginInit();
             this.PainelCorrecoes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NunCorrecaoRaioMenor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NunLimitacao)).BeginInit();
@@ -125,12 +134,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.NunAlta)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NunBaixa)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumEspacoLivre)).BeginInit();
-            this.PainelProps1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NunPointSize)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NunPointMargin)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NunRenderPoints)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NunBazierIterations)).BeginInit();
-            this.PainelProps2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -170,6 +173,9 @@
             // PainelLegend
             // 
             this.PainelLegend.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PainelLegend.Controls.Add(this.label30);
+            this.PainelLegend.Controls.Add(this.ShortFormat);
+            this.PainelLegend.Controls.Add(this.LongFormat);
             this.PainelLegend.Controls.Add(this.label14);
             this.PainelLegend.Controls.Add(this.label13);
             this.PainelLegend.Controls.Add(this.label11);
@@ -355,7 +361,7 @@
             // Cb_Trifasico
             // 
             this.Cb_Trifasico.AutoSize = true;
-            this.Cb_Trifasico.Location = new System.Drawing.Point(123, 58);
+            this.Cb_Trifasico.Location = new System.Drawing.Point(123, 57);
             this.Cb_Trifasico.Name = "Cb_Trifasico";
             this.Cb_Trifasico.Size = new System.Drawing.Size(72, 17);
             this.Cb_Trifasico.TabIndex = 5;
@@ -366,7 +372,7 @@
             // Tb_FonteTest
             // 
             this.Tb_FonteTest.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.Tb_FonteTest.Location = new System.Drawing.Point(3, 208);
+            this.Tb_FonteTest.Location = new System.Drawing.Point(3, 196);
             this.Tb_FonteTest.MaxLength = 30;
             this.Tb_FonteTest.Name = "Tb_FonteTest";
             this.Tb_FonteTest.ReadOnly = true;
@@ -377,7 +383,7 @@
             // 
             // NunWidth
             // 
-            this.NunWidth.Location = new System.Drawing.Point(111, 119);
+            this.NunWidth.Location = new System.Drawing.Point(111, 114);
             this.NunWidth.Name = "NunWidth";
             this.NunWidth.Size = new System.Drawing.Size(84, 20);
             this.NunWidth.TabIndex = 2;
@@ -385,7 +391,7 @@
             // 
             // NunHeight
             // 
-            this.NunHeight.Location = new System.Drawing.Point(3, 119);
+            this.NunHeight.Location = new System.Drawing.Point(3, 114);
             this.NunHeight.Name = "NunHeight";
             this.NunHeight.Size = new System.Drawing.Size(84, 20);
             this.NunHeight.TabIndex = 2;
@@ -394,7 +400,7 @@
             // Lk_AlterarFonte
             // 
             this.Lk_AlterarFonte.AutoSize = true;
-            this.Lk_AlterarFonte.Location = new System.Drawing.Point(158, 192);
+            this.Lk_AlterarFonte.Location = new System.Drawing.Point(158, 180);
             this.Lk_AlterarFonte.Name = "Lk_AlterarFonte";
             this.Lk_AlterarFonte.Size = new System.Drawing.Size(37, 13);
             this.Lk_AlterarFonte.TabIndex = 2;
@@ -405,7 +411,7 @@
             // Lk_AlterarFundoCarimbo
             // 
             this.Lk_AlterarFundoCarimbo.AutoSize = true;
-            this.Lk_AlterarFundoCarimbo.Location = new System.Drawing.Point(158, 144);
+            this.Lk_AlterarFundoCarimbo.Location = new System.Drawing.Point(158, 136);
             this.Lk_AlterarFundoCarimbo.Name = "Lk_AlterarFundoCarimbo";
             this.Lk_AlterarFundoCarimbo.Size = new System.Drawing.Size(37, 13);
             this.Lk_AlterarFundoCarimbo.TabIndex = 2;
@@ -416,7 +422,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(108, 103);
+            this.label4.Location = new System.Drawing.Point(108, 98);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(43, 13);
             this.label4.TabIndex = 1;
@@ -425,7 +431,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(3, 192);
+            this.label6.Location = new System.Drawing.Point(3, 180);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(75, 13);
             this.label6.TabIndex = 1;
@@ -434,7 +440,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 144);
+            this.label5.Location = new System.Drawing.Point(3, 136);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(68, 13);
             this.label5.TabIndex = 1;
@@ -443,7 +449,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(3, 103);
+            this.label3.Location = new System.Drawing.Point(3, 98);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(34, 13);
             this.label3.TabIndex = 1;
@@ -452,7 +458,7 @@
             // PainelCorFundoCarimbo
             // 
             this.PainelCorFundoCarimbo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PainelCorFundoCarimbo.Location = new System.Drawing.Point(3, 160);
+            this.PainelCorFundoCarimbo.Location = new System.Drawing.Point(3, 152);
             this.PainelCorFundoCarimbo.Name = "PainelCorFundoCarimbo";
             this.PainelCorFundoCarimbo.Size = new System.Drawing.Size(192, 26);
             this.PainelCorFundoCarimbo.TabIndex = 0;
@@ -460,7 +466,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(3, 42);
+            this.label9.Location = new System.Drawing.Point(3, 41);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(42, 13);
             this.label9.TabIndex = 1;
@@ -469,7 +475,7 @@
             // Tb_Modelo
             // 
             this.Tb_Modelo.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.Tb_Modelo.Location = new System.Drawing.Point(3, 56);
+            this.Tb_Modelo.Location = new System.Drawing.Point(3, 55);
             this.Tb_Modelo.MaxLength = 30;
             this.Tb_Modelo.Name = "Tb_Modelo";
             this.Tb_Modelo.Size = new System.Drawing.Size(84, 20);
@@ -594,6 +600,162 @@
             this.tabPage1.TabIndex = 1;
             this.tabPage1.Text = "Parâmetros de renderização";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("SansSerif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.label29.Location = new System.Drawing.Point(252, 130);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(83, 15);
+            this.label29.TabIndex = 1;
+            this.label29.Text = "Propriedades";
+            // 
+            // PainelProps2
+            // 
+            this.PainelProps2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PainelProps2.Controls.Add(this.Cb_UsarBazier);
+            this.PainelProps2.Controls.Add(this.Cb_DescreverPonto);
+            this.PainelProps2.Location = new System.Drawing.Point(240, 138);
+            this.PainelProps2.Name = "PainelProps2";
+            this.PainelProps2.Size = new System.Drawing.Size(237, 127);
+            this.PainelProps2.TabIndex = 12;
+            // 
+            // Cb_UsarBazier
+            // 
+            this.Cb_UsarBazier.AutoSize = true;
+            this.Cb_UsarBazier.Location = new System.Drawing.Point(10, 41);
+            this.Cb_UsarBazier.Name = "Cb_UsarBazier";
+            this.Cb_UsarBazier.Size = new System.Drawing.Size(140, 17);
+            this.Cb_UsarBazier.TabIndex = 14;
+            this.Cb_UsarBazier.Text = "Usar algoritmo de Bazier";
+            this.Cb_UsarBazier.UseVisualStyleBackColor = true;
+            this.Cb_UsarBazier.CheckedChanged += new System.EventHandler(this.Cb_UsarBazier_CheckedChanged);
+            // 
+            // Cb_DescreverPonto
+            // 
+            this.Cb_DescreverPonto.AutoSize = true;
+            this.Cb_DescreverPonto.Location = new System.Drawing.Point(10, 18);
+            this.Cb_DescreverPonto.Name = "Cb_DescreverPonto";
+            this.Cb_DescreverPonto.Size = new System.Drawing.Size(166, 17);
+            this.Cb_DescreverPonto.TabIndex = 13;
+            this.Cb_DescreverPonto.Text = "Desenhar descrição de ponto";
+            this.Cb_DescreverPonto.UseVisualStyleBackColor = true;
+            this.Cb_DescreverPonto.CheckedChanged += new System.EventHandler(this.Cb_DescreverPonto_CheckedChanged);
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Font = new System.Drawing.Font("SansSerif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.label24.Location = new System.Drawing.Point(252, 13);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(83, 15);
+            this.label24.TabIndex = 1;
+            this.label24.Text = "Propriedades";
+            // 
+            // PainelProps1
+            // 
+            this.PainelProps1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PainelProps1.Controls.Add(this.NunBazierIterations);
+            this.PainelProps1.Controls.Add(this.NunPointMargin);
+            this.PainelProps1.Controls.Add(this.label28);
+            this.PainelProps1.Controls.Add(this.label26);
+            this.PainelProps1.Controls.Add(this.NunRenderPoints);
+            this.PainelProps1.Controls.Add(this.label27);
+            this.PainelProps1.Controls.Add(this.NunPointSize);
+            this.PainelProps1.Controls.Add(this.label25);
+            this.PainelProps1.Location = new System.Drawing.Point(240, 20);
+            this.PainelProps1.Name = "PainelProps1";
+            this.PainelProps1.Size = new System.Drawing.Size(237, 100);
+            this.PainelProps1.TabIndex = 7;
+            // 
+            // NunBazierIterations
+            // 
+            this.NunBazierIterations.Location = new System.Drawing.Point(131, 66);
+            this.NunBazierIterations.Maximum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.NunBazierIterations.Name = "NunBazierIterations";
+            this.NunBazierIterations.Size = new System.Drawing.Size(97, 20);
+            this.NunBazierIterations.TabIndex = 11;
+            this.NunBazierIterations.ValueChanged += new System.EventHandler(this.NunBazierIterations_ValueChanged);
+            // 
+            // NunPointMargin
+            // 
+            this.NunPointMargin.Location = new System.Drawing.Point(131, 29);
+            this.NunPointMargin.Maximum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.NunPointMargin.Name = "NunPointMargin";
+            this.NunPointMargin.Size = new System.Drawing.Size(97, 20);
+            this.NunPointMargin.TabIndex = 9;
+            this.NunPointMargin.ValueChanged += new System.EventHandler(this.NunPointMargin_ValueChanged);
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Location = new System.Drawing.Point(128, 50);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(78, 13);
+            this.label28.TabIndex = 1;
+            this.label28.Text = "Iteração Bazier";
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Location = new System.Drawing.Point(128, 13);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(90, 13);
+            this.label26.TabIndex = 1;
+            this.label26.Text = "Margem de ponto";
+            // 
+            // NunRenderPoints
+            // 
+            this.NunRenderPoints.Location = new System.Drawing.Point(10, 66);
+            this.NunRenderPoints.Maximum = new decimal(new int[] {
+            128,
+            0,
+            0,
+            0});
+            this.NunRenderPoints.Name = "NunRenderPoints";
+            this.NunRenderPoints.Size = new System.Drawing.Size(97, 20);
+            this.NunRenderPoints.TabIndex = 10;
+            this.NunRenderPoints.ValueChanged += new System.EventHandler(this.NunRenderPoints_ValueChanged);
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Location = new System.Drawing.Point(7, 50);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(116, 13);
+            this.label27.TabIndex = 1;
+            this.label27.Text = "Ponts. de renderização";
+            // 
+            // NunPointSize
+            // 
+            this.NunPointSize.Location = new System.Drawing.Point(10, 29);
+            this.NunPointSize.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.NunPointSize.Name = "NunPointSize";
+            this.NunPointSize.Size = new System.Drawing.Size(97, 20);
+            this.NunPointSize.TabIndex = 8;
+            this.NunPointSize.ValueChanged += new System.EventHandler(this.NunPointSize_ValueChanged);
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(7, 13);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(97, 13);
+            this.label25.TabIndex = 1;
+            this.label25.Text = "Tamanho de ponto";
             // 
             // label16
             // 
@@ -801,161 +963,38 @@
             this.NumEspacoLivre.TabIndex = 0;
             this.NumEspacoLivre.ValueChanged += new System.EventHandler(this.NumEspacoLivre_ValueChanged);
             // 
-            // PainelProps1
+            // LongFormat
             // 
-            this.PainelProps1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PainelProps1.Controls.Add(this.NunBazierIterations);
-            this.PainelProps1.Controls.Add(this.NunPointMargin);
-            this.PainelProps1.Controls.Add(this.label28);
-            this.PainelProps1.Controls.Add(this.label26);
-            this.PainelProps1.Controls.Add(this.NunRenderPoints);
-            this.PainelProps1.Controls.Add(this.label27);
-            this.PainelProps1.Controls.Add(this.NunPointSize);
-            this.PainelProps1.Controls.Add(this.label25);
-            this.PainelProps1.Location = new System.Drawing.Point(240, 20);
-            this.PainelProps1.Name = "PainelProps1";
-            this.PainelProps1.Size = new System.Drawing.Size(237, 100);
-            this.PainelProps1.TabIndex = 7;
+            this.LongFormat.AutoSize = true;
+            this.LongFormat.Location = new System.Drawing.Point(7, 175);
+            this.LongFormat.Name = "LongFormat";
+            this.LongFormat.Size = new System.Drawing.Size(92, 17);
+            this.LongFormat.TabIndex = 2;
+            this.LongFormat.TabStop = true;
+            this.LongFormat.Text = "Formato longo";
+            this.LongFormat.UseVisualStyleBackColor = true;
+            this.LongFormat.CheckedChanged += new System.EventHandler(this.LongFormat_CheckedChanged);
             // 
-            // label24
+            // ShortFormat
             // 
-            this.label24.AutoSize = true;
-            this.label24.Font = new System.Drawing.Font("SansSerif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.label24.Location = new System.Drawing.Point(252, 13);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(83, 15);
-            this.label24.TabIndex = 1;
-            this.label24.Text = "Propriedades";
+            this.ShortFormat.AutoSize = true;
+            this.ShortFormat.Location = new System.Drawing.Point(7, 193);
+            this.ShortFormat.Name = "ShortFormat";
+            this.ShortFormat.Size = new System.Drawing.Size(90, 17);
+            this.ShortFormat.TabIndex = 2;
+            this.ShortFormat.TabStop = true;
+            this.ShortFormat.Text = "Formato curto";
+            this.ShortFormat.UseVisualStyleBackColor = true;
+            this.ShortFormat.CheckedChanged += new System.EventHandler(this.ShortFormat_CheckedChanged);
             // 
-            // NunPointSize
+            // label30
             // 
-            this.NunPointSize.Location = new System.Drawing.Point(10, 29);
-            this.NunPointSize.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.NunPointSize.Name = "NunPointSize";
-            this.NunPointSize.Size = new System.Drawing.Size(97, 20);
-            this.NunPointSize.TabIndex = 8;
-            this.NunPointSize.ValueChanged += new System.EventHandler(this.NunPointSize_ValueChanged);
-            // 
-            // label25
-            // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(7, 13);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(97, 13);
-            this.label25.TabIndex = 1;
-            this.label25.Text = "Tamanho de ponto";
-            // 
-            // label26
-            // 
-            this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(128, 13);
-            this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(90, 13);
-            this.label26.TabIndex = 1;
-            this.label26.Text = "Margem de ponto";
-            // 
-            // NunPointMargin
-            // 
-            this.NunPointMargin.Location = new System.Drawing.Point(131, 29);
-            this.NunPointMargin.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            0});
-            this.NunPointMargin.Name = "NunPointMargin";
-            this.NunPointMargin.Size = new System.Drawing.Size(97, 20);
-            this.NunPointMargin.TabIndex = 9;
-            this.NunPointMargin.ValueChanged += new System.EventHandler(this.NunPointMargin_ValueChanged);
-            // 
-            // label27
-            // 
-            this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(7, 50);
-            this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(116, 13);
-            this.label27.TabIndex = 1;
-            this.label27.Text = "Ponts. de renderização";
-            // 
-            // NunRenderPoints
-            // 
-            this.NunRenderPoints.Location = new System.Drawing.Point(10, 66);
-            this.NunRenderPoints.Maximum = new decimal(new int[] {
-            128,
-            0,
-            0,
-            0});
-            this.NunRenderPoints.Name = "NunRenderPoints";
-            this.NunRenderPoints.Size = new System.Drawing.Size(97, 20);
-            this.NunRenderPoints.TabIndex = 10;
-            this.NunRenderPoints.ValueChanged += new System.EventHandler(this.NunRenderPoints_ValueChanged);
-            // 
-            // label28
-            // 
-            this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(128, 50);
-            this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(78, 13);
-            this.label28.TabIndex = 1;
-            this.label28.Text = "Iteração Bazier";
-            // 
-            // NunBazierIterations
-            // 
-            this.NunBazierIterations.Location = new System.Drawing.Point(131, 66);
-            this.NunBazierIterations.Maximum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.NunBazierIterations.Name = "NunBazierIterations";
-            this.NunBazierIterations.Size = new System.Drawing.Size(97, 20);
-            this.NunBazierIterations.TabIndex = 11;
-            this.NunBazierIterations.ValueChanged += new System.EventHandler(this.NunBazierIterations_ValueChanged);
-            // 
-            // PainelProps2
-            // 
-            this.PainelProps2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PainelProps2.Controls.Add(this.Cb_UsarBazier);
-            this.PainelProps2.Controls.Add(this.Cb_DescreverPonto);
-            this.PainelProps2.Location = new System.Drawing.Point(240, 138);
-            this.PainelProps2.Name = "PainelProps2";
-            this.PainelProps2.Size = new System.Drawing.Size(237, 127);
-            this.PainelProps2.TabIndex = 12;
-            // 
-            // label29
-            // 
-            this.label29.AutoSize = true;
-            this.label29.Font = new System.Drawing.Font("SansSerif", 9.749999F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.label29.Location = new System.Drawing.Point(252, 130);
-            this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(83, 15);
-            this.label29.TabIndex = 1;
-            this.label29.Text = "Propriedades";
-            // 
-            // Cb_DescreverPonto
-            // 
-            this.Cb_DescreverPonto.AutoSize = true;
-            this.Cb_DescreverPonto.Location = new System.Drawing.Point(10, 18);
-            this.Cb_DescreverPonto.Name = "Cb_DescreverPonto";
-            this.Cb_DescreverPonto.Size = new System.Drawing.Size(166, 17);
-            this.Cb_DescreverPonto.TabIndex = 13;
-            this.Cb_DescreverPonto.Text = "Desenhar descrição de ponto";
-            this.Cb_DescreverPonto.UseVisualStyleBackColor = true;
-            this.Cb_DescreverPonto.CheckedChanged += new System.EventHandler(this.Cb_DescreverPonto_CheckedChanged);
-            // 
-            // Cb_UsarBazier
-            // 
-            this.Cb_UsarBazier.AutoSize = true;
-            this.Cb_UsarBazier.Location = new System.Drawing.Point(10, 41);
-            this.Cb_UsarBazier.Name = "Cb_UsarBazier";
-            this.Cb_UsarBazier.Size = new System.Drawing.Size(140, 17);
-            this.Cb_UsarBazier.TabIndex = 14;
-            this.Cb_UsarBazier.Text = "Usar algoritmo de Bazier";
-            this.Cb_UsarBazier.UseVisualStyleBackColor = true;
-            this.Cb_UsarBazier.CheckedChanged += new System.EventHandler(this.Cb_UsarBazier_CheckedChanged);
+            this.label30.AutoSize = true;
+            this.label30.Location = new System.Drawing.Point(4, 159);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(165, 13);
+            this.label30.TabIndex = 3;
+            this.label30.Text = "Opções de renderização da data:";
             // 
             // PlaneProps
             // 
@@ -988,6 +1027,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.NunHeight)).EndInit();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.PainelProps2.ResumeLayout(false);
+            this.PainelProps2.PerformLayout();
+            this.PainelProps1.ResumeLayout(false);
+            this.PainelProps1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.NunBazierIterations)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NunPointMargin)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NunRenderPoints)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NunPointSize)).EndInit();
             this.PainelCorrecoes.ResumeLayout(false);
             this.PainelCorrecoes.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.NunCorrecaoRaioMenor)).EndInit();
@@ -997,14 +1044,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.NunAlta)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NunBaixa)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.NumEspacoLivre)).EndInit();
-            this.PainelProps1.ResumeLayout(false);
-            this.PainelProps1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.NunPointSize)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NunPointMargin)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NunRenderPoints)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.NunBazierIterations)).EndInit();
-            this.PainelProps2.ResumeLayout(false);
-            this.PainelProps2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1086,5 +1125,8 @@
         private System.Windows.Forms.Label label27;
         private System.Windows.Forms.CheckBox Cb_UsarBazier;
         private System.Windows.Forms.CheckBox Cb_DescreverPonto;
+        private System.Windows.Forms.RadioButton ShortFormat;
+        private System.Windows.Forms.RadioButton LongFormat;
+        private System.Windows.Forms.Label label30;
     }
 }

@@ -75,6 +75,8 @@ namespace ModeloBase.Componente
             NunQuebraLinhaLegenda.Value = Conf.Y_LEGEND_SUB_ITERATOR;
             NunTamanhoLinhaLegenda.Value = Conf.LEGEND_LINE_SIZE;
             NunEspessuraLinhaLegenda.Value = (decimal)Conf.LEGEND_LINE_HEIGHT;
+            LongFormat.Checked = Conf.DateFormat == DateFormt.Long;
+            ShortFormat.Checked = Conf.DateFormat == DateFormt.Short;
 
             //-------------------------------- TABPAGE 2 ----------------------------//
 
@@ -254,6 +256,16 @@ namespace ModeloBase.Componente
         private void Cb_UsarBazier_CheckedChanged(object sender, EventArgs e)
         {
             Parametros.USE_SMOOTH = Cb_UsarBazier.Checked;
+        }
+
+        private void LongFormat_CheckedChanged(object sender, EventArgs e)
+        {
+            Parametros.DateFormat = DateFormt.Long;
+        }
+
+        private void ShortFormat_CheckedChanged(object sender, EventArgs e)
+        {
+            Parametros.DateFormat = DateFormt.Short;
         }
     }
 }
