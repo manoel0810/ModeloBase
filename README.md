@@ -94,7 +94,7 @@ Este projeto está licenciado sob a [Licença MIT](https://github.com/manoel0810
 
 ## Aviso Legal
 
-O AutoSchematic é um projeto em desenvolvimento e não oferece garantia de qualquer tipo. O uso deste software é de responsabilidade do usuário. A equipe do EasyLi não se responsabiliza por quaisquer danos ou perdas decorrentes do uso deste software.
+O AutoSchematic é um projeto em desenvolvimento e não oferece garantia de qualquer tipo. O uso deste software é de responsabilidade do usuário. A equipe do AutoSchematic  não se responsabiliza por quaisquer danos ou perdas decorrentes do uso deste software.
 
 
 ## Contato
