@@ -13,6 +13,11 @@ namespace DllTeste
 
         private void Exec_Click(object sender, EventArgs e)
         {
+            LoadFunction();
+        }
+
+        private void LoadFunction()
+        {
             Ctrl.Reload(false);
             Ctrl.SetBobinas(new ModeloBase.Componente.Controle.Bobina[]
             {
@@ -33,6 +38,11 @@ namespace DllTeste
             });
 
             MessageBox.Show("Objeto carregado com informações pré programadas em código compilado", "Objeto inicializado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void Teste_Load(object sender, EventArgs e)
+        {
+            LoadFunction();
         }
     }
 }
