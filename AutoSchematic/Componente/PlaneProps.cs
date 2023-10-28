@@ -21,22 +21,22 @@ namespace ModeloBase.Componente
             if (Cb_Carimbo.Checked)
             {
                 PainelCarimbo.Enabled = true;
-                Parametros.CARIMBO = true;
+                Parametros.STAMP = true;
             }
             else
             {
                 PainelCarimbo.Enabled = false;
-                Parametros.CARIMBO = false;
+                Parametros.STAMP = false;
             }
 
             if (Cb_Carimbo.Checked)
             {
                 Tb_Titulo.Text = Conf.INFO;
                 Tb_Modelo.Text = Conf.MODEL;
-                NunHeight.Value = Conf.CARIMBO_HEIGHT;
-                NunWidth.Value = Conf.CARIMBO_WIDTH;
+                NunHeight.Value = Conf.STAMP_HEIGHT;
+                NunWidth.Value = Conf.STAMP_WIDTH;
                 PainelCorFundoCarimbo.BackColor = Conf.BACKGROUND_COLOR_CARIMBO;
-                Tb_FonteTest.Font = Conf.CARIMBO_FONT;
+                Tb_FonteTest.Font = Conf.STAMP_FONT;
                 Tb_FonteTest.Refresh();
                 Cb_Trifasico.Checked = Parametros.TRIFASIC;
             }
@@ -46,22 +46,22 @@ namespace ModeloBase.Componente
         {
             NunHeight.Maximum = MedidasPlano[0];
             NunWidth.Maximum = MedidasPlano[1];
-            Cb_Carimbo.Checked = Conf.CARIMBO;
+            Cb_Carimbo.Checked = Conf.STAMP;
 
-            if (Conf.CARIMBO)
+            if (Conf.STAMP)
             {
                 Tb_Titulo.Text = Conf.INFO;
                 Tb_Modelo.Text = Conf.MODEL;
-                NunHeight.Value = Conf.CARIMBO_HEIGHT;
-                NunWidth.Value = Conf.CARIMBO_WIDTH;
+                NunHeight.Value = Conf.STAMP_HEIGHT;
+                NunWidth.Value = Conf.STAMP_WIDTH;
                 PainelCorFundoCarimbo.BackColor = Conf.BACKGROUND_COLOR_CARIMBO;
-                Tb_FonteTest.Font = Conf.CARIMBO_FONT;
+                Tb_FonteTest.Font = Conf.STAMP_FONT;
                 Tb_FonteTest.Refresh();
                 Cb_Trifasico.Checked = Parametros.TRIFASIC;
             }
 
-            PainelCorX.BackColor = Conf.EIXO_X_COLOR;
-            PainelCorY.BackColor = Conf.EIXO_Y_COLOR;
+            PainelCorX.BackColor = Conf.X_AXIS_COLOR;
+            PainelCorY.BackColor = Conf.Y_AXISCOLOR;
             PainelCorFundo.BackColor = Conf.BACKGROUND_COLOR_PLANE;
             Cb_Legenda.Checked = Conf.LEGEND_LINE;
 
@@ -80,13 +80,13 @@ namespace ModeloBase.Componente
 
             //-------------------------------- TABPAGE 2 ----------------------------//
 
-            NumEspacoLivre.Value = (decimal)Conf.ESPACAMENTO_LIVRE;
-            NunBaixa.Value = (decimal)Conf.FATOR_CORRECAO_BAIXO;
-            NunAlta.Value = (decimal)Conf.FATOR_CORRECAO_ALTO;
-            NunCorrecaoRaioMaior.Value = (decimal)Conf.FATOR_CORRECAO_RAIO_MAIOR;
-            NunCorrecaoRaioMenor.Value = (decimal)Conf.FATOR_CORRECAO_RAIO_MENOR;
-            NunDecrement.Value = Conf.FATOR_CORRECAO_DECREMENTO;
-            NunLimitacao.Value = Conf.FATOR_CORRECAO_LIMITACAO;
+            NumEspacoLivre.Value = (decimal)Conf.FREE_SPACE;
+            NunBaixa.Value = (decimal)Conf.LOW_GRADE_CORRECTION;
+            NunAlta.Value = (decimal)Conf.HIGH_GRADE_CORRECTION;
+            NunCorrecaoRaioMaior.Value = (decimal)Conf.MAJOR_RADIUS_CORRECTION;
+            NunCorrecaoRaioMenor.Value = (decimal)Conf.SMALLER_RADIUS_CORRECTION;
+            NunDecrement.Value = Conf.DRECEMENT_CORRECTION_FACTOR;
+            NunLimitacao.Value = Conf.LIMIT_FACTOR;
 
             NunPointSize.Value = Conf.POINT_SIZE;
             NunPointMargin.Value = Conf.POINT_MARGIN;
@@ -114,12 +114,12 @@ namespace ModeloBase.Componente
 
         private void NunHeight_ValueChanged(object sender, EventArgs e)
         {
-            Parametros.CARIMBO_HEIGHT = (int)NunHeight.Value;
+            Parametros.STAMP_HEIGHT = (int)NunHeight.Value;
         }
 
         private void NunWidth_ValueChanged(object sender, EventArgs e)
         {
-            Parametros.CARIMBO_WIDTH = (int)NunWidth.Value;
+            Parametros.STAMP_WIDTH = (int)NunWidth.Value;
         }
 
         private void Lk_AlterarFundoCarimbo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -133,21 +133,21 @@ namespace ModeloBase.Componente
         {
             FontPic.ShowDialog(this);
             Tb_FonteTest.Font = FontPic.Font;
-            Parametros.CARIMBO_FONT = FontPic.Font;
+            Parametros.STAMP_FONT = FontPic.Font;
         }
 
         private void Lk_AlterarY_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             ColorPic.ShowDialog(this);
             PainelCorY.BackColor = ColorPic.Color;
-            Parametros.EIXO_Y_COLOR = ColorPic.Color;
+            Parametros.Y_AXISCOLOR = ColorPic.Color;
         }
 
         private void Lk_AlterarX_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             ColorPic.ShowDialog(this);
             PainelCorX.BackColor = ColorPic.Color;
-            Parametros.EIXO_X_COLOR = ColorPic.Color;
+            Parametros.X_AXIS_COLOR = ColorPic.Color;
         }
 
         private void Lk_AlterarFundo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -195,37 +195,37 @@ namespace ModeloBase.Componente
 
         private void NumEspacoLivre_ValueChanged(object sender, EventArgs e)
         {
-            Parametros.ESPACAMENTO_LIVRE = (double)NumEspacoLivre.Value;
+            Parametros.FREE_SPACE = (double)NumEspacoLivre.Value;
         }
 
         private void NunBaixa_ValueChanged(object sender, EventArgs e)
         {
-            Parametros.FATOR_CORRECAO_BAIXO = (double)NunBaixa.Value;
+            Parametros.LOW_GRADE_CORRECTION = (double)NunBaixa.Value;
         }
 
         private void NunAlta_ValueChanged(object sender, EventArgs e)
         {
-            Parametros.FATOR_CORRECAO_ALTO = (double)NunAlta.Value;
+            Parametros.HIGH_GRADE_CORRECTION = (double)NunAlta.Value;
         }
 
         private void NunCorrecaoRaioMaior_ValueChanged(object sender, EventArgs e)
         {
-            Parametros.FATOR_CORRECAO_RAIO_MAIOR = (double)NunCorrecaoRaioMaior.Value;
+            Parametros.MAJOR_RADIUS_CORRECTION = (double)NunCorrecaoRaioMaior.Value;
         }
 
         private void NunCorrecaoRaioMenor_ValueChanged(object sender, EventArgs e)
         {
-            Parametros.FATOR_CORRECAO_RAIO_MENOR = (double)NunCorrecaoRaioMenor.Value;
+            Parametros.SMALLER_RADIUS_CORRECTION = (double)NunCorrecaoRaioMenor.Value;
         }
 
         private void NunDecrement_ValueChanged(object sender, EventArgs e)
         {
-            Parametros.FATOR_CORRECAO_DECREMENTO = (int)NunDecrement.Value;
+            Parametros.DRECEMENT_CORRECTION_FACTOR = (int)NunDecrement.Value;
         }
 
         private void NunLimitacao_ValueChanged(object sender, EventArgs e)
         {
-            Parametros.FATOR_CORRECAO_LIMITACAO = (int)NunLimitacao.Value;
+            Parametros.LIMIT_FACTOR = (int)NunLimitacao.Value;
         }
 
         private void NunPointSize_ValueChanged(object sender, EventArgs e)
