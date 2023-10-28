@@ -53,15 +53,15 @@
 
 | Propriedade                       | Tipo       | Valor Padrão            | Descrição                                            |
 |-----------------------------------|------------|------------------------|------------------------------------------------------|
-| ESPACAMENTO_LIVRE                 | double     | 7.0                    | Espaçamento livre entre elementos                  |
-| FATOR_CORRECAO_BAIXO               | double     | 10.0                   | Fator de correção para valores baixos               |
-| FATOR_CORRECAO_ALTO                | double     | 0.0                    | Fator de correção para valores altos                |
-| FATOR_CORRECAO_RAIO_MAIOR          | double     | 0.10                   | Fator de correção para raio maior                   |
-| FATOR_CORRECAO_RAIO_MENOR          | double     | 0.08                   | Fator de correção para raio menor                   |
-| CARIMBO_WIDTH                     | int        | 180                    | Largura do carimbo                                   |
-| CARIMBO_HEIGHT                    | int        | 90                     | Altura do carimbo                                    |
-| FATOR_CORRECAO_DECREMENTO          | int        | 4                      | Fator de correção para decremento                   |
-| FATOR_CORRECAO_LIMITACAO           | int        | 8                      | Fator de correção para limitação                    |
+| FREE_SPACE                 | double     | 7.0                    | Espaçamento livre entre elementos                  |
+| LOW_GRADE_CORRECTION               | double     | 10.0                   | Fator de correção para valores baixos               |
+| HIGH_GRADE_CORRECTION                | double     | 0.0                    | Fator de correção para valores altos                |
+| MAJOR_RADIUS_CORRECTION          | double     | 0.10                   | Fator de correção para raio maior                   |
+| SMALLER_RADIUS_CORRECTION          | double     | 0.08                   | Fator de correção para raio menor                   |
+| STAMP_WIDTH                     | int        | 180                    | Largura do carimbo                                   |
+| STAMP_HEIGHT                    | int        | 90                     | Altura do carimbo                                    |
+| DRECEMENT_CORRECTION_FACTOR          | int        | 4                      | Fator de correção para decremento                   |
+| LIMIT_FACTOR           | int        | 8                      | Fator de correção para limitação                    |
 | POINT_SIZE                        | int        | 10                     | Tamanho do ponto                                     |
 | POINT_MARGIN                      | int        | 1                      | Margem do ponto                                      |
 | RENDER_POINTS                     | int        | 32                     | Pontos de renderização                               |
@@ -75,17 +75,17 @@
 | LINE_WIDTH                        | float      | 2.0                    | Largura da linha                                     |
 | USE_SMOOTH                        | bool       | true                   | Usar suavização                                      |
 | DRAW_LATTERS                      | bool       | true                   | Desenhar letras                                      |
-| CARIMBO                           | bool       | true                   | Usar carimbo                                         |
+| STAMP                           | bool       | true                   | Usar carimbo                                         |
 | LEGEND_LINE                       | bool       | true                   | Usar linha de legenda                                |
 | TRIFASIC                          | bool       | true                   | Modo trifásico                                       |
 | INFO                              | string     | "ESQUEMA MOTOR ELÉTRICO" | Informações adicionais                              |
 | MODEL                             | string     | "MODELO"               | Modelo específico                                    |
-| CARIMBO_FONT                      | Font       | Consolas, 8pt, Bold    | Fonte do carimbo                                     |
+| STAMP_FONT                      | Font       | Consolas, 8pt, Bold    | Fonte do carimbo                                     |
 | DateFormat                        | DateFormt  | Long                   | Formato de data                                      |
 | BACKGROUND_COLOR_PLANE            | Color      | AliceBlue              | Cor de fundo do plano                               |
 | BACKGROUND_COLOR_CARIMBO          | Color      | Yellow                 | Cor de fundo do carimbo                             |
-| EIXO_X_COLOR                      | Color      | Blue                   | Cor do eixo X                                       |
-| EIXO_Y_COLOR                      | Color      | Red                    | Cor do eixo Y                                       |
+| X_AXIS_COLOR                      | Color      | Blue                   | Cor do eixo X                                       |
+| Y_AXIS_COLOR                      | Color      | Red                    | Cor do eixo Y                                       |
 
 
 ## Licença
