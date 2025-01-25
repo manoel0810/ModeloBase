@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoSchematic.Componente.Components;
+using System;
 using System.Windows.Forms;
 using static ModeloBase.Componente.Controle;
 

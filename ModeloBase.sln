@@ -4,10 +4,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModeloBase", "ModeloBase\ModeloBase.csproj", "{39665336-A00A-496A-988C-81A101A52D6E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C4529F95-74A5-4685-B58F-9AB4A0386EB0} = {C4529F95-74A5-4685-B58F-9AB4A0386EB0}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoSchematic", "AutoSchematic\AutoSchematic.csproj", "{C4529F95-74A5-4685-B58F-9AB4A0386EB0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DllTeste", "DllTeste\DllTeste.csproj", "{EC1E2D3B-447E-4B7A-AF56-B2015FDD5ABD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C4529F95-74A5-4685-B58F-9AB4A0386EB0} = {C4529F95-74A5-4685-B58F-9AB4A0386EB0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

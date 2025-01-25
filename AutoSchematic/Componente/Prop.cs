@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoSchematic.Componente.Components;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -7,10 +8,10 @@ namespace ModeloBase.Componente
     public partial class Prop : Form
     {
         public int ExitState { get; set; }
-        public readonly Controle.BobinaProps PropsOutInstance = new Controle.BobinaProps();
+        public readonly BobinaProps PropsOutInstance = new BobinaProps();
         private Color SelectedColor = Color.Black;
 
-        public Prop(Controle.BobinaProps Bobina)
+        public Prop(BobinaProps Bobina)
         {
             InitializeComponent();
             PropsOutInstance = Bobina;
@@ -65,12 +66,12 @@ namespace ModeloBase.Componente
 
         private void Tb_Letra_TextChanged(object sender, EventArgs e)
         {
-            
+
             if (Tb_Letra.Text.Length > 0)
                 PropsOutInstance.Latters = Tb_Letra.Text[0];
             else
                 PropsOutInstance.Latters = '*';
-            
+
         }
     }
 }

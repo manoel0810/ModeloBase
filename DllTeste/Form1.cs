@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoSchematic.Componente.Components;
+using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -19,16 +20,16 @@ namespace DllTeste
         private void LoadFunction()
         {
             Ctrl.Reload(false);
-            Ctrl.SetBobinas(new ModeloBase.Componente.Controle.Bobina[]
+            Ctrl.SetBobinas(new Bobina[]
             {
-                new ModeloBase.Componente.Controle.Bobina()
+                new Bobina()
                 {
                     Raio = 230,
                     Color = new Pen(Brushes.DarkBlue, 2f),
                     Bobinas = 6
                 },
 
-                new ModeloBase.Componente.Controle.Bobina()
+                new Bobina()
                 {
                     Raio = 150,
                     Color = new Pen(Brushes.Red, 2f),

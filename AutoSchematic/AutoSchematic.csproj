@@ -46,6 +46,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Componente\Components\Bobina.cs" />
+    <Compile Include="Componente\Components\BobinaProps.cs" />
+    <Compile Include="Componente\Components\Configuracoes.cs" />
+    <Compile Include="Componente\Components\Linha.cs" />
+    <Compile Include="Componente\Components\Math\Helper.cs" />
+    <Compile Include="Componente\Components\Math\SmoothBazier.cs" />
+    <Compile Include="Componente\Components\Menu\ContextMenu.cs" />
+    <Compile Include="Componente\Components\Menu\ContextMenuPlane.cs" />
+    <Compile Include="Componente\Components\Menu\ContextMenuPointLine.cs" />
+    <Compile Include="Componente\Components\Ponto.cs" />
     <Compile Include="Componente\SchemaicErros.cs" />
     <Compile Include="MainObject.cs" />
     <Compile Include="Componente\Controle.cs">
